@@ -29,9 +29,9 @@ const FinalDesign = () => {
           <Box className="flex gap-4 mb-4 flex-wrap">
             <FormControl className="w-1/4">
               <RHFAutocomplete
-                name="service"
+                name="location"
                 options={["Option 1", "Option 2", "Option 3"]}
-                label="Service"
+                label="Location"
                 rules={{ required: "This field is required" }}
               />
             </FormControl>
@@ -145,7 +145,7 @@ const FinalDesign = () => {
                         label="Signal Equipment Room"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
@@ -154,7 +154,7 @@ const FinalDesign = () => {
                         label="Telecom Equipment Room"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
@@ -164,7 +164,7 @@ const FinalDesign = () => {
                         label="UPS S&T"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
@@ -173,7 +173,7 @@ const FinalDesign = () => {
                         label="UPS Electrical"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
@@ -182,7 +182,7 @@ const FinalDesign = () => {
                         label="Station Control Room"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
@@ -191,7 +191,7 @@ const FinalDesign = () => {
                         label="Ticket Office Manager"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
@@ -200,7 +200,7 @@ const FinalDesign = () => {
                         label="EFO"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
@@ -228,7 +228,7 @@ const FinalDesign = () => {
                         label="Ass"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
@@ -237,7 +237,7 @@ const FinalDesign = () => {
                         label="Toilet"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
@@ -246,7 +246,7 @@ const FinalDesign = () => {
                         label="Pump Room"
                         rules={
                           {
-                            // required: "This field is required",
+                            required: "This field is required",
                           }
                         }
                       />
