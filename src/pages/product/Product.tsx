@@ -17,7 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomDrawer from "../../components/CustomDrawer";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 import RHFAutocomplete from "../../components/RHF/RHFAutocomplete";
 import RHFTextField from "../../components/RHF/RHFTextField";
@@ -49,6 +49,21 @@ const Product = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [productTypeArray, setProductTypeArray] = useState<string[]>([]);
+  const [vendorArray, setVendorArray] = useState<string[]>([]);
+  const { setValue, control } = methods;
+
+  const handleProductTypeChange = (event: any, newValue: string[]) => {
+    setProductTypeArray(newValue);
+    setValue("product-type", newValue);
+    console.log(event);
+  };
+
+  const handleVendorChange = (event: any, newValue: string[]) => {
+    setVendorArray(newValue);
+    setValue("vendor", newValue);
+    console.log(event);
+  };
 
   const handleCloseModalForAddLocation = () => {
     setOpen(false);
@@ -69,6 +84,8 @@ const Product = () => {
 
   const onSubmit = (data: any) => {
     console.log("Form Data:", data);
+    console.log("Product Type Array:", productTypeArray);
+    console.log("Vendor Array:", vendorArray);
   };
 
   const handleDeleteProducts = () => {
@@ -184,33 +201,36 @@ const Product = () => {
                   }}
                 />
 
-                <Autocomplete
-                  multiple
-                  id="tags-filled"
-                  options={top100Films.map((option) => option.title)}
-                  // defaultValue={top100Films[0] ? [top100Films[0].title] : []}
-                  freeSolo
-                  renderTags={(value: readonly string[], getTagProps) =>
-                    value.map((option: string, index: number) => {
-                      const { key, ...tagProps } = getTagProps({ index });
-                      return (
-                        <Chip
-                          variant="outlined"
-                          label={option}
-                          key={key}
-                          {...tagProps}
+                <Controller
+                  name="product-type"
+                  control={control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      multiple
+                      options={top100Films.map((option) => option.title)}
+                      value={productTypeArray}
+                      onChange={handleProductTypeChange}
+                      freeSolo
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                          <Chip
+                            variant="outlined"
+                            label={option}
+                            {...getTagProps({ index })}
+                          />
+                        ))
+                      }
+                      renderInput={(params) => (
+                        <RHFTextField
+                          {...params}
+                          name="product-type"
+                          label="Product Type"
+                          rules={{
+                            required: "This field is required",
+                          }}
                         />
-                      );
-                    })
-                  }
-                  renderInput={(params) => (
-                    <RHFTextField
-                      {...params}
-                      name="product-type"
-                      label="Product Type"
-                      rules={{
-                        required: "This field is required",
-                      }}
+                      )}
                     />
                   )}
                 />
@@ -236,38 +256,40 @@ const Product = () => {
               </Box>
 
               <Box>
-                <Autocomplete
-                  multiple
-                  id="tags-filled"
-                  options={top100Films.map((option) => option.title)}
-                  // defaultValue={top100Films[0] ? [top100Films[0].title] : []}
-                  freeSolo
-                  renderTags={(value: readonly string[], getTagProps) =>
-                    value.map((option: string, index: number) => {
-                      const { key, ...tagProps } = getTagProps({ index });
-                      return (
-                        <Chip
-                          variant="outlined"
-                          label={option}
-                          key={key}
-                          {...tagProps}
+                <Controller
+                  name="vendor"
+                  control={control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      multiple
+                      options={top100Films.map((option) => option.title)}
+                      value={vendorArray}
+                      onChange={handleVendorChange}
+                      freeSolo
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                          <Chip
+                            variant="outlined"
+                            label={option}
+                            {...getTagProps({ index })}
+                          />
+                        ))
+                      }
+                      renderInput={(params) => (
+                        <RHFTextField
+                          {...params}
+                          name="vendor"
+                          label="Vendor"
+                          rules={{
+                            required: "This field is required",
+                          }}
                         />
-                      );
-                    })
-                  }
-                  renderInput={(params) => (
-                    <RHFTextField
-                      {...params}
-                      name="vendor"
-                      label="Vendor"
-                      rules={{
-                        required: "This field is required",
-                      }}
+                      )}
                     />
                   )}
                 />
               </Box>
-
               <Button variant="contained" fullWidth size="large" type="submit">
                 {isEditing ? "Update" : "Submit"}
               </Button>

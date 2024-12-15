@@ -11,7 +11,7 @@ function App() {
   return (
     <>
       <Suspense fallback="Loading...">
-        {token ? <PrivateRoutes /> : <PublicRoutes />}
+        {!token ? <PrivateRoutes /> : <PublicRoutes />}
         <ToastContainer />
       </Suspense>
     </>
