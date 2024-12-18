@@ -23,24 +23,7 @@ import RHFAutocomplete from "../../components/RHF/RHFAutocomplete";
 import RHFTextField from "../../components/RHF/RHFTextField";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Product 1", 159, 6.0, 24, 4.0),
-  createData("Product 2", 237, 9.0, 37, 4.3),
-  createData("Product 3", 262, 16.0, 24, 6.0),
-  createData("Product 4", 305, 3.7, 67, 4.3),
-  createData("Product 5", 356, 16.0, 49, 3.9),
-];
+import { useGetProductListQuery } from "../../redux/api/api";
 
 const top100Films = [{ title: "Ground floor" }];
 
@@ -52,6 +35,7 @@ const Product = () => {
   const [productTypeArray, setProductTypeArray] = useState<string[]>([]);
   const [vendorArray, setVendorArray] = useState<string[]>([]);
   const { setValue, control } = methods;
+  const { data: productDataList } = useGetProductListQuery({});
 
   const handleProductTypeChange = (event: any, newValue: string[]) => {
     setProductTypeArray(newValue);
@@ -122,12 +106,12 @@ const Product = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows?.map((item: any, index: any) => (
+            {productDataList?.data?.map((item: any, index: any) => (
               <TableRow
                 key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" className="capitalize">
                   {item.name}
                 </TableCell>
                 <TableCell align="right">

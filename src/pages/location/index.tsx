@@ -103,7 +103,7 @@ const Locations = () => {
     };
     try {
       const resp: any = await deleteLocation(deleteRequestObj).unwrap();
-      if (resp === null) {
+      if (resp.status === 1005) {
         toast.success("Successfully deleted location");
         setOpenDeleteModal(false);
       }
@@ -137,8 +137,8 @@ const Locations = () => {
         </Button>
       </Box>
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+      <TableContainer component={Paper} sx={{ minWidth: 650, height: "72vh" }}>
+        <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell>Locations</TableCell>
@@ -146,7 +146,7 @@ const Locations = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {locationDataList?.map((item: any, index: any) => (
+            {locationDataList?.data?.map((item: any, index: any) => (
               <TableRow
                 key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

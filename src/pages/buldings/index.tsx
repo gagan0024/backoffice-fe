@@ -17,22 +17,13 @@ import { useState } from "react";
 import AddBuilding from "./AddBuilding";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
-
-function createData(name: string) {
-  return { name };
-}
-
-const rows = [
-  createData("Delhi"),
-  createData("Noida"),
-  createData("Mumbai"),
-  createData("Agra"),
-  createData("Chennai"),
-];
+import { useGetBuildingListQuery } from "../../redux/api/api";
 
 const Buildings = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const { data: buildingList } = useGetBuildingListQuery({});
+  const [currentBuilding, setCurrentBuilding] = useState<string>("");
 
   const handleRouteAddBuildings = () => {
     setOpen(true);
@@ -42,11 +33,13 @@ const Buildings = () => {
     setOpen(false);
   };
 
-  const handleOpenUpdateModal = () => {
+  const handleOpenUpdateModal = (id: any) => {
+    setCurrentBuilding(id);
     setOpen(true);
   };
 
-  const handlOpenDeleteConfirm = () => {
+  const handlOpenDeleteConfirm = (id:any) => {
+    setCurrentBuilding(id);
     setOpenDeleteModal(true);
   };
 
@@ -80,30 +73,34 @@ const Buildings = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Buildings</TableCell>
+                <TableCell>Descrition</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {buildingList?.data?.map((item: any, index: number) => (
                 <TableRow
-                  key={row.name}
+                  key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    {item.type}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {item.description}
                   </TableCell>
                   <TableCell align="right">
                     <IconButton
                       aria-label="edit"
                       color="primary"
-                      onClick={handleOpenUpdateModal}
+                      onClick={() => handleOpenUpdateModal(item.id)}
                     >
                       <EditNoteIcon />
                     </IconButton>
                     <IconButton
                       aria-label="delete"
                       color="warning"
-                      onClick={handlOpenDeleteConfirm}
+                      onClick={()=>handlOpenDeleteConfirm(item.id)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -121,7 +118,7 @@ const Buildings = () => {
         setOpen={setOpen}
         closeDrawer={handleCloseDrawer}
       >
-        <AddBuilding setOpen={setOpen} />
+        <AddBuilding setOpen={setOpen} currentBuilding={currentBuilding} />
       </CustomDrawer>
 
       <CustomModal openModal={openDeleteModal}>

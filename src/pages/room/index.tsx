@@ -17,22 +17,12 @@ import { useState } from "react";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
 import AddRooms from "./AddRooms";
-
-function createData(name: string) {
-  return { name };
-}
-
-const rows = [
-  createData("Room 1"),
-  createData("Room 2"),
-  createData("Room 3"),
-  createData("Room 4"),
-  createData("Room 5"),
-];
+import { useGetRoomsListQuery } from "../../redux/api/api";
 
 const Rooms = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const { data: roomDataList } = useGetRoomsListQuery({});
 
   const handleRouteAddRoom = () => {
     setOpen(true);
@@ -75,22 +65,26 @@ const Rooms = () => {
         </Button>
       </Box>
       <Box>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <TableContainer component={Paper} sx={{ minWidth: 650, height: "72vh" }}>
+          <Table  size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <TableCell>Rooms</TableCell>
+                <TableCell>Description</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {roomDataList?.data?.map((item:any,index:number) => (
                 <TableRow
-                  key={row.name}
+                  key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    {row.name}
+                  <TableCell component="th" scope="row" className="lowercase">
+                    {item.name}
+                  </TableCell>
+                  <TableCell component="th" scope="row" className="lowercase">
+                    {item.description}
                   </TableCell>
                   <TableCell align="right">
                     <IconButton

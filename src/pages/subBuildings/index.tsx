@@ -17,22 +17,13 @@ import { useState } from "react";
 import AddSubBuildings from "./AddSubBuilding";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
-
-function createData(name: string) {
-  return { name };
-}
-
-const rows = [
-  createData("Building 1"),
-  createData("Building 2"),
-  createData("Building 3"),
-  createData("Building 4"),
-  createData("Building 5"),
-];
+import { useGetSubBuildingListQuery } from "../../redux/api/api";
 
 const SubBuildings = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const { data: subBuildingDataList } = useGetSubBuildingListQuery({});
+  console.log(subBuildingDataList, "subBuildingDataList");
 
   const handleRouteAddBuildings = () => {
     setOpen(true);
@@ -75,22 +66,26 @@ const SubBuildings = () => {
         </Button>
       </Box>
       <Box>
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ minWidth: 650, height: "72vh" }}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <TableCell>Sub-Buildings</TableCell>
+                <TableCell>Description</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {subBuildingDataList?.data?.map((item: any, index: number) => (
                 <TableRow
-                  key={row.name}
+                  key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    {item.type}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {item.description}
                   </TableCell>
                   <TableCell align="right">
                     <IconButton

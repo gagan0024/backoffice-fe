@@ -17,22 +17,12 @@ import { useState } from "react";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
 import AddLevels from "./AddLevel";
-
-function createData(name: string) {
-  return { name };
-}
-
-const rows = [
-  createData("Level 1"),
-  createData("Level 2"),
-  createData("Level 3"),
-  createData("Level 4"),
-  createData("Level 5"),
-];
+import { useGetLevelsListQuery } from "../../redux/api/api";
 
 const Levels = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const {data:levelDataList}=useGetLevelsListQuery({});
 
   const handleRouteAddLevels = () => {
     setOpen(true);
@@ -75,22 +65,26 @@ const Levels = () => {
         </Button>
       </Box>
       <Box>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <TableContainer component={Paper} sx={{ minWidth: 650, height: "72vh" }}>
+          <Table size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <TableCell>Levels</TableCell>
+                <TableCell>Description</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {levelDataList?.data?.map((item:any,index:number) => (
                 <TableRow
-                  key={row.name}
+                  key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    {item.name}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {item.description}
                   </TableCell>
                   <TableCell align="right">
                     <IconButton
