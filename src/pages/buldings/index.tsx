@@ -17,39 +17,58 @@ import { useState } from "react";
 import AddBuilding from "./AddBuilding";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
-import { useGetBuildingListQuery } from "../../redux/api/api";
+import {
+  useDeleteBuildingMutation,
+  useGetBuildingListQuery,
+} from "../../redux/api/api";
+import { toast } from "react-toastify";
 
 const Buildings = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { data: buildingList } = useGetBuildingListQuery({});
   const [currentBuilding, setCurrentBuilding] = useState<string>("");
+  const [buildingId, setBuildingId] = useState<string>("");
+  const [deleteBuilding] = useDeleteBuildingMutation();
 
   const handleRouteAddBuildings = () => {
     setOpen(true);
+    setCurrentBuilding("");
   };
 
   const handleCloseDrawer = () => {
     setOpen(false);
   };
 
-  const handleOpenUpdateModal = (id: any) => {
-    setCurrentBuilding(id);
+  const handleOpenUpdateModal = (item: any) => {
+    setCurrentBuilding(item);
     setOpen(true);
   };
 
-  const handlOpenDeleteConfirm = (id:any) => {
-    setCurrentBuilding(id);
+  const handlOpenDeleteConfirm = (item: any) => {
+    setBuildingId(item.id);
     setOpenDeleteModal(true);
   };
 
-  const handleDeleteBuildings = () => {
-    alert("please integrate API for Delete Items");
+  const handleDeleteBuildings = async () => {
+    const deleteRequestObj = {
+      url: `buildings/${buildingId}`,
+    };
+    try {
+      const resp: any = await deleteBuilding(deleteRequestObj).unwrap();
+      if (resp.status === 2005) {
+        toast.success(resp.message);
+        setOpenDeleteModal(false);
+      }
+    } catch (error) {
+      toast.error("Failed to delete location");
+    }
     setOpenDeleteModal(false);
   };
 
   const handleCloseDeleteConfirm = () => {
     setOpenDeleteModal(false);
+    setCurrentBuilding("");
   };
 
   return (
@@ -68,8 +87,11 @@ const Buildings = () => {
         </Button>
       </Box>
       <Box>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <TableContainer
+          component={Paper}
+          sx={{ minWidth: 650, maxHeight: "72vh" }}
+        >
+          <Table size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <TableCell>Buildings</TableCell>
@@ -93,14 +115,14 @@ const Buildings = () => {
                     <IconButton
                       aria-label="edit"
                       color="primary"
-                      onClick={() => handleOpenUpdateModal(item.id)}
+                      onClick={() => handleOpenUpdateModal(item)}
                     >
                       <EditNoteIcon />
                     </IconButton>
                     <IconButton
                       aria-label="delete"
                       color="warning"
-                      onClick={()=>handlOpenDeleteConfirm(item.id)}
+                      onClick={() => handlOpenDeleteConfirm(item)}
                     >
                       <DeleteIcon />
                     </IconButton>

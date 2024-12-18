@@ -1,6 +1,5 @@
 import { Box, Button, IconButton } from "@mui/material";
 import { FormProvider, useForm } from "react-hook-form";
-import { useState } from "react";
 import RHFTextField from "../../components/RHF/RHFTextField";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -8,6 +7,7 @@ import {
   useUpdateBuildingMutation,
 } from "../../redux/api/api";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 interface FormValues {
   type: string;
@@ -15,36 +15,34 @@ interface FormValues {
 }
 
 const AddBuilding = (props: any) => {
-  const [fileValue, setFileValue] = useState<File | null>(null);
-  const { setOpen, currentBuilding, isEditing } = props;
-
+  const { setOpen, currentBuilding } = props;
   const [AddBuildingData] = useAddBuildingMutation();
   const [UpdateBuildingData] = useUpdateBuildingMutation();
 
   const methods = useForm<FormValues>();
-  const { reset, handleSubmit } = methods;
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      console.log("File selected:", file.name);
-      setFileValue(file);
-    }
-  };
+  const { reset, handleSubmit, setValue } = methods;
 
   const onSubmit = async (data: FormValues) => {
     const reqObject = {
-      url: isEditing ? `buildings/${currentBuilding}` : "buildings",
-      body: { type: data.type, description: data.description },
+      url: currentBuilding?.id
+        ? `buildings/${currentBuilding.id}`
+        : "buildings",
+      body: {
+        type: data.type,
+        description: data.description,
+      },
     };
-
     try {
-      if (isEditing) {
-        await UpdateBuildingData(reqObject).unwrap();
-        toast.success("Building updated successfully");
+      if (currentBuilding?.id) {
+        const resp: any = await UpdateBuildingData(reqObject).unwrap();
+        if (resp.status === 2002) {
+          toast.success("Building updated successfully");
+        }
       } else {
-        await AddBuildingData(reqObject).unwrap();
-        toast.success("Building added successfully");
+        const resp: any = await AddBuildingData(reqObject).unwrap();
+        if (resp.status === 2001) {
+          toast.success("Building added successfully");
+        }
       }
       reset();
       setOpen(false);
@@ -53,8 +51,18 @@ const AddBuilding = (props: any) => {
     }
   };
 
+  useEffect(() => {
+    if (currentBuilding?.id) {
+      setValue("type", currentBuilding.type);
+      setValue("description", currentBuilding.description);
+    } else {
+      reset();
+    }
+  }, [currentBuilding, setValue, reset]);
+
   const handleCloseModal = () => {
     setOpen(false);
+    reset();
   };
 
   return (
@@ -62,7 +70,7 @@ const AddBuilding = (props: any) => {
       {/* Header */}
       <Box className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold">
-          {isEditing ? "Edit Building" : "Add Building"}
+          {currentBuilding?.id ? "Update Building" : "Add Building"}
         </h2>
         <IconButton onClick={handleCloseModal}>
           <CloseIcon />
@@ -91,28 +99,12 @@ const AddBuilding = (props: any) => {
               rows={4}
               rules={{ required: "This field is required" }}
             />
-
-            {/* File Upload */}
-            <Box>
-              <input
-                accept="image/*"
-                type="file"
-                id="file-upload"
-                onChange={handleFileChange}
-                style={{ display: "none" }}
-              />
-              <label htmlFor="file-upload">
-                <Button variant="outlined" component="span">
-                  {fileValue ? "Change File" : "Upload File"}
-                </Button>
-              </label>
-            </Box>
           </Box>
 
           {/* Submit Button */}
           <Box>
             <Button type="submit" size="large" variant="contained" fullWidth>
-              {isEditing ? "Update" : "Submit"}
+              {currentBuilding?.id ? "Update" : "Submit"}
             </Button>
           </Box>
         </form>

@@ -84,6 +84,14 @@ export const api = createApi({
       invalidatesTags: ["Building"],
     }),
 
+    deleteBuilding: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Building"],
+    }),
+
     getSubBuildingList: builder.query<any, any>({
       query: () => ({
         url: `${apiRoot}sub-buildings`,
@@ -115,7 +123,6 @@ export const api = createApi({
       }),
       providesTags: ["Product"],
     }),
-
   }),
 });
 
@@ -132,4 +139,5 @@ export const {
   useGetSubBuildingListQuery,
   useGetLevelsListQuery,
   useGetRoomsListQuery,
+  useDeleteBuildingMutation,
 } = api;

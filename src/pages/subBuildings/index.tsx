@@ -66,8 +66,11 @@ const SubBuildings = () => {
         </Button>
       </Box>
       <Box>
-        <TableContainer component={Paper} sx={{ minWidth: 650, height: "72vh" }}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <TableContainer
+          component={Paper}
+          sx={{ minWidth: 650, maxHeight: "72vh" }}
+        >
+          <Table size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <TableCell>Sub-Buildings</TableCell>

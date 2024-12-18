@@ -137,7 +137,7 @@ const Locations = () => {
         </Button>
       </Box>
 
-      <TableContainer component={Paper} sx={{ minWidth: 650, height: "72vh" }}>
+      <TableContainer component={Paper} sx={{ minWidth: 650, maxHeight: "72vh" }}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
