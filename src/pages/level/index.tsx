@@ -17,31 +17,52 @@ import { useState } from "react";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
 import AddLevels from "./AddLevel";
-import { useGetLevelsListQuery } from "../../redux/api/api";
+import {
+  useDeleteLevelsMutation,
+  useGetLevelsListQuery,
+} from "../../redux/api/api";
+import { toast } from "react-toastify";
 
 const Levels = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const {data:levelDataList}=useGetLevelsListQuery({});
+  const { data: levelDataList } = useGetLevelsListQuery({});
+  const [updatelevelsObj, setUpdatelevelsObj] = useState<object>({});
+  const [deleteLevels, setDeleteLevels] = useState<object>({});
+  const [deleteLevelItem] = useDeleteLevelsMutation();
 
   const handleRouteAddLevels = () => {
     setOpen(true);
+    setUpdatelevelsObj({});
   };
 
   const handleCloseDrawer = () => {
     setOpen(false);
   };
 
-  const handleOpenUpdateModal = () => {
+  const handleOpenUpdateModal = (item: any) => {
     setOpen(true);
+    setUpdatelevelsObj(item);
   };
 
-  const handlOpenDeleteConfirm = () => {
+  const handlOpenDeleteConfirm = (item: any) => {
+    setDeleteLevels(item.id);
     setOpenDeleteModal(true);
   };
 
-  const handleDeleteLevels = () => {
-    alert("please integrate API for Delete Items");
+  const handleDeleteLevels = async () => {
+    const deleteRequestObj = {
+      url: `levels/${deleteLevels}`,
+    };
+    try {
+      const resp: any = await deleteLevelItem(deleteRequestObj).unwrap();
+      if (resp.status === 2025) {
+        toast.success(resp.message);
+        setOpenDeleteModal(false);
+      }
+    } catch (error) {
+      toast.error("Failed to delete location");
+    }
     setOpenDeleteModal(false);
   };
 
@@ -65,7 +86,10 @@ const Levels = () => {
         </Button>
       </Box>
       <Box>
-        <TableContainer component={Paper} sx={{ minWidth: 650, height: "72vh" }}>
+        <TableContainer
+          component={Paper}
+          sx={{ minWidth: 650, height: "72vh" }}
+        >
           <Table size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
@@ -75,7 +99,7 @@ const Levels = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {levelDataList?.data?.map((item:any,index:number) => (
+              {levelDataList?.data?.map((item: any, index: number) => (
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -90,14 +114,14 @@ const Levels = () => {
                     <IconButton
                       aria-label="edit"
                       color="primary"
-                      onClick={handleOpenUpdateModal}
+                      onClick={() => handleOpenUpdateModal(item)}
                     >
                       <EditNoteIcon />
                     </IconButton>
                     <IconButton
                       aria-label="delete"
                       color="warning"
-                      onClick={handlOpenDeleteConfirm}
+                      onClick={() => handlOpenDeleteConfirm(item)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -115,7 +139,7 @@ const Levels = () => {
         setOpen={setOpen}
         closeDrawer={handleCloseDrawer}
       >
-        <AddLevels setOpen={setOpen}/>
+        <AddLevels setOpen={setOpen} updatelevelsObj={updatelevelsObj} />
       </CustomDrawer>
 
       <CustomModal openModal={openDeleteModal}>

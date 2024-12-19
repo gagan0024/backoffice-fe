@@ -19,7 +19,7 @@ interface FormValues {
 }
 
 const AddSubBuildings = (props: any) => {
-  const { setOpen, updateSubBuildingId } = props; // Assume updateSubBuildingId contains data when editing.
+  const { setOpen, updateSubBuildingId } = props;
   const methods = useForm<FormValues>();
   const { reset, handleSubmit, setValue } = methods;
   const [addSubBuilding] = useAddSubBuildingMutation();
@@ -64,10 +64,8 @@ const AddSubBuildings = (props: any) => {
       );
       let newObj = {
         label: tempType?.type,
-        value: tempType?.id
-      }
-
-
+        value: tempType?.id,
+      };
       setValue("type", updateSubBuildingId.type);
       setValue("description", updateSubBuildingId.description);
       setValue("building_id", newObj);
