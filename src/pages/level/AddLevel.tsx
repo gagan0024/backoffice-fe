@@ -10,7 +10,7 @@ import {
   useGetSubBuildingListQuery,
   useUpdateLevelsMutation,
 } from "../../redux/api/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface FormValues {
   sub_building_id: any;
@@ -22,13 +22,33 @@ interface FormValues {
 const AddLevels = (props: any) => {
   const { setOpen, updatelevelsObj } = props;
   const methods = useForm<FormValues>();
-  const { reset, handleSubmit, setValue } = methods;
+  const { reset, handleSubmit, setValue, watch } = methods;
   const [addLevels] = useAddLevelsMutation();
   const [updateLevels] = useUpdateLevelsMutation();
   const { data: buildingList } = useGetBuildingListQuery({});
-  // const buildingId = methods.watch();
-  // const new_buildingId = buildingId?.building_id?.value;
-  const { data: subBuildingList } = useGetSubBuildingListQuery({});
+  const [subBuildingObj, setSubBuildingObj] = useState<any>(null);
+
+  const { data: subBuildingList }: any = useGetSubBuildingListQuery({});
+  const buildingID = watch("building_id");
+
+  useEffect(() => {
+    if (subBuildingList?.data?.length) {
+      let tempObj: any = {};
+      for (let i = 0; i < subBuildingList?.data?.length; i++) {
+        let subBuilding = subBuildingList.data[i];
+        let newObj = {
+          label: subBuilding.type,
+          value: subBuilding.id,
+          key: i,
+        };
+        tempObj[subBuilding.building_id] = tempObj[subBuilding.building_id]
+          ?.length
+          ? [...tempObj[subBuilding.building_id], newObj]
+          : [newObj];
+      }
+      setSubBuildingObj(tempObj);
+    }
+  }, [subBuildingList]);
 
   const onSubmit = async (data: FormValues) => {
     const reqObject = {
@@ -129,13 +149,9 @@ const AddLevels = (props: any) => {
                   <RHFAutocomplete
                     name="sub_building_id"
                     options={
-                      subBuildingList?.data?.map(
-                        (item: any, index: number) => ({
-                          label: item.type || "Unknown",
-                          value: item.id,
-                          key: index,
-                        })
-                      ) || []
+                      buildingID && subBuildingObj[buildingID?.value]
+                        ? subBuildingObj[buildingID?.value]
+                        : []
                     }
                     getOptionLabel={(option) => option?.label || ""}
                     isOptionEqualToValue={(option: any, value: any) =>

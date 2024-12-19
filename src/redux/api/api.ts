@@ -1,18 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { apiRoot, baseQueryWithRetryAndReAuth } from "../../global";
 
-function toQueryString(obj: Record<string, any>): string {
-  return (
-    "?" +
-    Object.entries(obj)
-      .map(
-        ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-      )
-      .join("&")
-  );
-}
-
 export const api = createApi({
   reducerPath: "buildings",
   baseQuery: baseQueryWithRetryAndReAuth,
@@ -24,6 +12,8 @@ export const api = createApi({
     "SubBuilding",
     "Level",
     "Rooms",
+    "Service",
+    "SubService",
   ],
 
   endpoints: (builder) => ({
@@ -105,8 +95,8 @@ export const api = createApi({
     }),
 
     getSubBuildingList: builder.query<any, any>({
-      query: (reqObj) => ({
-        url: `${apiRoot}sub-buildings${toQueryString(reqObj)}`,
+      query: () => ({
+        url: `${apiRoot}sub-buildings`,
         method: "GET",
       }),
       providesTags: ["SubBuilding"],
@@ -180,12 +170,54 @@ export const api = createApi({
       providesTags: ["Rooms"],
     }),
 
+    deleteRooms: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Rooms"],
+    }),
+
+    addRooms: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["Rooms"],
+    }),
+
+    updateRooms: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "PATCH",
+        body: data.body,
+      }),
+      invalidatesTags: ["Rooms"],
+    }),
+
     getProductList: builder.query<any, any>({
       query: () => ({
         url: `${apiRoot}products`,
         method: "GET",
       }),
       providesTags: ["Product"],
+    }),
+
+    getServiceList: builder.query<any, any>({
+      query: () => ({
+        url: `${apiRoot}levels`,
+        method: "GET",
+      }),
+      providesTags: ["Service"],
+    }),
+
+    getSubServiceList: builder.query<any, any>({
+      query: () => ({
+        url: `${apiRoot}levels`,
+        method: "GET",
+      }),
+      providesTags: ["SubService"],
     }),
   }),
 });
@@ -209,5 +241,10 @@ export const {
   useDeleteSubBuildingMutation,
   useAddLevelsMutation,
   useUpdateLevelsMutation,
-  useDeleteLevelsMutation
+  useDeleteLevelsMutation,
+  useGetServiceListQuery,
+  useGetSubServiceListQuery,
+  useDeleteRoomsMutation,
+  useAddRoomsMutation,
+  useUpdateRoomsMutation,
 } = api;

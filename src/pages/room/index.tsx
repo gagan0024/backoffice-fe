@@ -17,31 +17,52 @@ import { useState } from "react";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
 import AddRooms from "./AddRooms";
-import { useGetRoomsListQuery } from "../../redux/api/api";
+import {
+  useDeleteRoomsMutation,
+  useGetRoomsListQuery,
+} from "../../redux/api/api";
+import { toast } from "react-toastify";
 
 const Rooms = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [deleteRoomId, setDeleteRoomId] = useState<string>("");
+  const [RoomData, setRoomData] = useState<object>({});
   const { data: roomDataList } = useGetRoomsListQuery({});
+  const [deleteRooms] = useDeleteRoomsMutation();
 
   const handleRouteAddRoom = () => {
     setOpen(true);
+    setRoomData({});
   };
 
   const handleCloseDrawer = () => {
     setOpen(false);
   };
 
-  const handleOpenUpdateModal = () => {
+  const handleOpenUpdateModal = (item: any) => {
+    setRoomData(item);
     setOpen(true);
   };
 
-  const handlOpenDeleteConfirm = () => {
+  const handlOpenDeleteConfirm = (item: any) => {
     setOpenDeleteModal(true);
+    setDeleteRoomId(item.id);
   };
 
-  const handleDeleteRoom = () => {
-    alert("please integrate API for Delete Items");
+  const handleDeleteRoom = async () => {
+    const deleteRequestObj = {
+      url: `rooms/${deleteRoomId}`,
+    };
+    try {
+      const resp: any = await deleteRooms(deleteRequestObj).unwrap();
+      if (resp.status === 2035) {
+        toast.success(resp.message);
+        setOpenDeleteModal(false);
+      }
+    } catch (error) {
+      toast.error("Failed to delete location");
+    }
     setOpenDeleteModal(false);
   };
 
@@ -65,8 +86,11 @@ const Rooms = () => {
         </Button>
       </Box>
       <Box>
-        <TableContainer component={Paper} sx={{ minWidth: 650, height: "72vh" }}>
-          <Table  size="small" aria-label="a dense table">
+        <TableContainer
+          component={Paper}
+          sx={{ minWidth: 650, height: "72vh" }}
+        >
+          <Table size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <TableCell>Rooms</TableCell>
@@ -75,7 +99,7 @@ const Rooms = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {roomDataList?.data?.map((item:any,index:number) => (
+              {roomDataList?.data?.map((item: any, index: number) => (
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -90,14 +114,14 @@ const Rooms = () => {
                     <IconButton
                       aria-label="edit"
                       color="primary"
-                      onClick={handleOpenUpdateModal}
+                      onClick={() => handleOpenUpdateModal(item)}
                     >
                       <EditNoteIcon />
                     </IconButton>
                     <IconButton
                       aria-label="delete"
                       color="warning"
-                      onClick={handlOpenDeleteConfirm}
+                      onClick={() => handlOpenDeleteConfirm(item)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -115,7 +139,7 @@ const Rooms = () => {
         setOpen={setOpen}
         closeDrawer={handleCloseDrawer}
       >
-        <AddRooms setOpen={setOpen} />
+        <AddRooms setOpen={setOpen} RoomData={RoomData}/>
       </CustomDrawer>
 
       <CustomModal openModal={openDeleteModal}>

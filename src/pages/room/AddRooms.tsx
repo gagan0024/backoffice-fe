@@ -1,12 +1,31 @@
 import { Box, Button, FormControl, IconButton } from "@mui/material";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import RHFTextField from "../../components/RHF/RHFTextField";
 import CloseIcon from "@mui/icons-material/Close";
 import RHFAutocomplete from "../../components/RHF/RHFAutocomplete";
+import {
+  useGetBuildingListQuery,
+  useGetSubBuildingListQuery,
+} from "../../redux/api/api";
 
 const AddRooms = (props: any) => {
   const { setOpen } = props;
   const methods = useForm();
+  const { data: buildingList } = useGetBuildingListQuery({});
+
+  // Watch selected building value
+  const selectedBuilding = useWatch({
+    control: methods.control,
+    name: "building",
+  });
+
+  console.log(selectedBuilding,"selectedBuilding")
+
+  // Trigger query for sub-buildings based on selected building
+  const { data: subBuildingList } = useGetSubBuildingListQuery(
+    selectedBuilding?.value,
+    { skip: !selectedBuilding }
+  );
 
   const onSubmit = (data: any) => {
     console.log("Form Data:", data);
@@ -31,26 +50,49 @@ const AddRooms = (props: any) => {
             onSubmit={methods.handleSubmit(onSubmit)}
           >
             <Box className="flex flex-col gap-4">
+              {/* Building Autocomplete */}
               <Box>
                 <FormControl fullWidth>
                   <RHFAutocomplete
                     name="building"
-                    options={["Option 1", "Option 2", "Option 3"]}
+                    options={
+                      buildingList?.data?.map((item: any) => ({
+                        label: item.type || "Unknown",
+                        value: item.id,
+                      })) || []
+                    }
+                    getOptionLabel={(option) => option?.label || ""}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      option?.value === value?.value
+                    }
                     label="Building"
                     rules={{ required: "This field is required" }}
                   />
                 </FormControl>
               </Box>
+
+              {/* Sub Building Autocomplete */}
               <Box>
                 <FormControl fullWidth>
                   <RHFAutocomplete
-                    name="sub-building"
-                    options={["Option 1", "Option 2", "Option 3"]}
+                    name="sub_building"
+                    options={
+                      subBuildingList?.data?.map((item: any) => ({
+                        label: item.type || "Unknown",
+                        value: item.id,
+                      })) || []
+                    }
+                    getOptionLabel={(option) => option?.label || ""}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      option?.value === value?.value
+                    }
                     label="Sub Building"
                     rules={{ required: "This field is required" }}
                   />
                 </FormControl>
               </Box>
+
+              {/* Level Autocomplete */}
               <Box>
                 <FormControl fullWidth>
                   <RHFAutocomplete
@@ -61,6 +103,8 @@ const AddRooms = (props: any) => {
                   />
                 </FormControl>
               </Box>
+
+              {/* Room Input */}
               <Box>
                 <FormControl fullWidth>
                   <RHFTextField
@@ -70,6 +114,8 @@ const AddRooms = (props: any) => {
                   />
                 </FormControl>
               </Box>
+
+              {/* Description Input */}
               <Box>
                 <RHFTextField
                   name="description"
@@ -82,6 +128,8 @@ const AddRooms = (props: any) => {
                 />
               </Box>
             </Box>
+
+            {/* Submit Button */}
             <Box>
               <Button type="submit" size="large" variant="contained" fullWidth>
                 Submit
