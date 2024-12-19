@@ -17,32 +17,52 @@ import { useState } from "react";
 import AddSubBuildings from "./AddSubBuilding";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
-import { useGetSubBuildingListQuery } from "../../redux/api/api";
+import {
+  useDeleteSubBuildingMutation,
+  useGetSubBuildingListQuery,
+} from "../../redux/api/api";
+import { toast } from "react-toastify";
 
 const SubBuildings = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { data: subBuildingDataList } = useGetSubBuildingListQuery({});
-  console.log(subBuildingDataList, "subBuildingDataList");
+  const [subBuildingId, setSubBuildingId] = useState<string>("");
+  const [updateSubBuildingId, setUpdateSubBuildingId] = useState<string>("");
+  const [deleteSubBuilding] = useDeleteSubBuildingMutation();
 
   const handleRouteAddBuildings = () => {
     setOpen(true);
+    setUpdateSubBuildingId("")
   };
 
   const handleCloseDrawer = () => {
     setOpen(false);
   };
 
-  const handleOpenEditModal = () => {
+  const handleOpenEditModal = (item: any) => {
+    setUpdateSubBuildingId(item);
     setOpen(true);
   };
 
-  const handleOpenDeleteSubBuildings = () => {
+  const handleOpenDeleteSubBuildings = (item: any) => {
+    setSubBuildingId(item.id);
     setOpenDeleteModal(true);
   };
 
-  const handleDeleteSubBuildings = () => {
-    alert("please Integrate API for Delete Sub Buildings");
+  const handleDeleteSubBuildings = async () => {
+    const deleteRequestObj = {
+      url: `sub-buildings/${subBuildingId}`,
+    };
+    try {
+      const resp: any = await deleteSubBuilding(deleteRequestObj).unwrap();
+      if (resp.status === 2015) {
+        toast.success(resp.message);
+        setOpenDeleteModal(false);
+      }
+    } catch (error) {
+      toast.error("Failed to delete location");
+    }
     setOpenDeleteModal(false);
   };
 
@@ -94,14 +114,14 @@ const SubBuildings = () => {
                     <IconButton
                       aria-label="edit"
                       color="primary"
-                      onClick={handleOpenEditModal}
+                      onClick={() => handleOpenEditModal(item)}
                     >
                       <EditNoteIcon />
                     </IconButton>
                     <IconButton
                       aria-label="delete"
                       color="warning"
-                      onClick={handleOpenDeleteSubBuildings}
+                      onClick={() => handleOpenDeleteSubBuildings(item)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -119,7 +139,10 @@ const SubBuildings = () => {
         setOpen={setOpen}
         closeDrawer={handleCloseDrawer}
       >
-        <AddSubBuildings setOpen={setOpen} />
+        <AddSubBuildings
+          setOpen={setOpen}
+          updateSubBuildingId={updateSubBuildingId}
+        />
       </CustomDrawer>
 
       <CustomModal openModal={openDeleteModal}>

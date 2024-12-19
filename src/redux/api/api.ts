@@ -100,6 +100,32 @@ export const api = createApi({
       providesTags: ["SubBuilding"],
     }),
 
+    addSubBuilding: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["SubBuilding"],
+    }),
+
+    updateSubBuilding: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "PATCH",
+        body: data.body,
+      }),
+      invalidatesTags: ["SubBuilding"],
+    }),
+
+    deleteSubBuilding: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["SubBuilding"],
+    }),
+
     getLevelsList: builder.query<any, any>({
       query: () => ({
         url: `${apiRoot}levels`,
@@ -140,4 +166,7 @@ export const {
   useGetLevelsListQuery,
   useGetRoomsListQuery,
   useDeleteBuildingMutation,
+  useAddSubBuildingMutation,
+  useUpdateSubBuildingMutation,
+  useDeleteSubBuildingMutation
 } = api;
