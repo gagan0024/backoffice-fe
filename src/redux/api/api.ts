@@ -128,9 +128,25 @@ export const api = createApi({
       invalidatesTags: ["SubBuilding"],
     }),
 
+    getSubBuildingListByID: builder.query<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}sub-buildings?building_id=${data.building_id}`,
+        method: "GET",
+      }),
+      providesTags: ["SubBuilding"],
+    }),
+
     getLevelsList: builder.query<any, any>({
       query: () => ({
         url: `${apiRoot}levels`,
+        method: "GET",
+      }),
+      providesTags: ["Level"],
+    }),
+
+    getLevelsListByID: builder.query<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}levels?sub_building_id=${data.sub_building_id}`,
         method: "GET",
       }),
       providesTags: ["Level"],
@@ -204,6 +220,33 @@ export const api = createApi({
       providesTags: ["Product"],
     }),
 
+    addProduct: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["Product"],
+    }),
+
+    deleteProduct: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Product"],
+    }),
+
+
+    updateProduct: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "PATCH",
+        body: data.body,
+      }),
+      invalidatesTags: ["Product"],
+    }),
+
     getServiceList: builder.query<any, any>({
       query: () => ({
         url: `${apiRoot}levels`,
@@ -247,4 +290,9 @@ export const {
   useDeleteRoomsMutation,
   useAddRoomsMutation,
   useUpdateRoomsMutation,
+  useGetSubBuildingListByIDQuery,
+  useGetLevelsListByIDQuery,
+  useAddProductMutation,
+  useDeleteProductMutation,
+  useUpdateProductMutation
 } = api;

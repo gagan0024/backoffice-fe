@@ -27,7 +27,6 @@ const AddLevels = (props: any) => {
   const [updateLevels] = useUpdateLevelsMutation();
   const { data: buildingList } = useGetBuildingListQuery({});
   const [subBuildingObj, setSubBuildingObj] = useState<any>(null);
-
   const { data: subBuildingList }: any = useGetSubBuildingListQuery({});
   const buildingID = watch("building_id");
 

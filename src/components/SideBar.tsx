@@ -14,6 +14,8 @@ import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import HouseIcon from "@mui/icons-material/House";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import DynamicFormIcon from "@mui/icons-material/DynamicForm";
+import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 
 const SideBar = () => {
   const [selectedItem, setSelectedItem] = useState<string>("Home");
@@ -27,6 +29,8 @@ const SideBar = () => {
     { name: "Sub-Buildings", icon: <CategoryIcon />, route: "/sub-buildings" },
     { name: "Levels", icon: <ViewStreamIcon />, route: "/levels" },
     { name: "Rooms", icon: <HouseIcon />, route: "/rooms" },
+    { name: "Services", icon: <SettingsIcon />, route: "/services" },
+    { name: "Sub-Services", icon: <SettingsSuggestIcon />, route: "/sub-services" },
     { name: "Products", icon: <InventoryIcon />, route: "/product" },
     {
       name: "Final Design Form",
