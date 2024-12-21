@@ -26,6 +26,7 @@ import {
   useUpdateLocationMutation,
   useGetLocationListQuery,
 } from "../../redux/api/api";
+import CustomSkeleton from "../../components/CustomSkeleton";
 
 interface FormValues {
   name: string;
@@ -40,7 +41,9 @@ const Locations = () => {
   const [addLocation] = useAddLocationMutation();
   const [updateLocation] = useUpdateLocationMutation();
   const [deleteLocation] = useDeleteLocationMutation();
-  const { data: locationDataList }: any = useGetLocationListQuery({});
+  const { data: locationDataList, isFetching }: any = useGetLocationListQuery(
+    {}
+  );
 
   const {
     register,
@@ -137,45 +140,52 @@ const Locations = () => {
         </Button>
       </Box>
 
-      <TableContainer component={Paper} sx={{ minWidth: 650, maxHeight: "72vh" }}>
-        <Table size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Locations</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {locationDataList?.data?.map((item: any, index: any) => (
-              <TableRow
-                key={index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {item.name}
-                </TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    aria-label="edit"
-                    color="primary"
-                    onClick={() => handleEditLocation(item)}
-                  >
-                    <EditNoteIcon />
-                  </IconButton>
-
-                  <IconButton
-                    aria-label="delete"
-                    color="warning"
-                    onClick={() => handleOpenDeleteBox(item)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+      {!isFetching ? (
+        <TableContainer
+          component={Paper}
+          sx={{ minWidth: 650, maxHeight: "70vh" }}
+        >
+          <Table size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Locations</TableCell>
+                <TableCell align="right">Actions</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {locationDataList?.data?.map((item: any, index: any) => (
+                <TableRow
+                  key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {item.name}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      aria-label="edit"
+                      color="primary"
+                      onClick={() => handleEditLocation(item)}
+                    >
+                      <EditNoteIcon />
+                    </IconButton>
+
+                    <IconButton
+                      aria-label="delete"
+                      color="warning"
+                      onClick={() => handleOpenDeleteBox(item)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <CustomSkeleton />
+      )}
 
       <CustomDrawer
         open={open}
@@ -185,7 +195,7 @@ const Locations = () => {
         <Box className="flex flex-col gap-8">
           <Box className="flex justify-between items-center">
             <h2 className="text-2xl font-bold">
-              {isEditing ? "Edit Location" : "Add Location"}
+              {isEditing ? "Update Location" : "Add Location"}
             </h2>
             <IconButton onClick={handleCloseModalForAddLocation}>
               <CloseIcon />
@@ -206,7 +216,7 @@ const Locations = () => {
               helperText={errors.name ? String(errors.name.message) : undefined}
             />
             <Button variant="contained" fullWidth size="large" type="submit">
-              {isEditing ? "Update" : "Submit"}
+              {isEditing ? "Update Location" : "Add Location"}
             </Button>
           </form>
         </Box>

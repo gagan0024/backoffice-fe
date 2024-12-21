@@ -84,7 +84,7 @@ const AddSubBuildings = (props: any) => {
       {/* Header */}
       <Box className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold">
-          {updateSubBuildingId?.id ? "Edit Sub-Building" : "Add Sub-Building"}
+          {updateSubBuildingId?.id ? "Update Sub-Building" : "Add Sub-Building"}
         </h2>
         <IconButton onClick={handleCloseModalForAddBuildings}>
           <CloseIcon />
@@ -140,7 +140,7 @@ const AddSubBuildings = (props: any) => {
           {/* Submit Button */}
           <Box>
             <Button type="submit" size="large" variant="contained" fullWidth>
-              {updateSubBuildingId?.id ? "Update" : "Submit"}
+              {updateSubBuildingId?.id ? "Update Sub Building" : "Add Sub Building"}
             </Button>
           </Box>
         </form>

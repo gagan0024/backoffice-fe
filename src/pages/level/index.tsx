@@ -22,11 +22,12 @@ import {
   useGetLevelsListQuery,
 } from "../../redux/api/api";
 import { toast } from "react-toastify";
+import CustomSkeleton from "../../components/CustomSkeleton";
 
 const Levels = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const { data: levelDataList } = useGetLevelsListQuery({});
+  const { data: levelDataList, isFetching } = useGetLevelsListQuery({});
   const [updatelevelsObj, setUpdatelevelsObj] = useState<object>({});
   const [deleteLevels, setDeleteLevels] = useState<object>({});
   const [deleteLevelItem] = useDeleteLevelsMutation();
@@ -85,53 +86,57 @@ const Levels = () => {
           Add Level
         </Button>
       </Box>
-      <Box>
-        <TableContainer
-          component={Paper}
-          sx={{ minWidth: 650, height: "72vh" }}
-        >
-          <Table size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Levels</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {levelDataList?.data?.map((item: any, index: number) => (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {item.name}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {item.description}
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      aria-label="edit"
-                      color="primary"
-                      onClick={() => handleOpenUpdateModal(item)}
-                    >
-                      <EditNoteIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      color="warning"
-                      onClick={() => handlOpenDeleteConfirm(item)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
+      {isFetching ? (
+        <CustomSkeleton />
+      ) : (
+        <Box>
+          <TableContainer
+            component={Paper}
+            sx={{ minWidth: 650, height: "72vh" }}
+          >
+            <Table size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Levels</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell align="right">Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+              </TableHead>
+              <TableBody>
+                {levelDataList?.data?.map((item: any, index: number) => (
+                  <TableRow
+                    key={index}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {item.name}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {item.description}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        aria-label="edit"
+                        color="primary"
+                        onClick={() => handleOpenUpdateModal(item)}
+                      >
+                        <EditNoteIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        color="warning"
+                        onClick={() => handlOpenDeleteConfirm(item)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
 
       {/* this is add building form with drawer */}
       <CustomDrawer

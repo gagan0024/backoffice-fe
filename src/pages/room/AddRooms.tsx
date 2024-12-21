@@ -7,7 +7,9 @@ import {
   useAddRoomsMutation,
   useGetBuildingListQuery,
   useGetLevelsListByIDQuery,
+  useGetLevelsListQuery,
   useGetSubBuildingListByIDQuery,
+  useGetSubBuildingListQuery,
   useUpdateRoomsMutation,
 } from "../../redux/api/api";
 import { toast } from "react-toastify";
@@ -47,6 +49,18 @@ const AddRooms = (props: any) => {
       skip: !newSelectedSubBuilding,
     }
   );
+  const { data: alllevelListData } = useGetLevelsListQuery(
+    {},
+    {
+      skip: !Object.keys(RoomData).length,
+    }
+  );
+  const { data: allSubBuildingListData } = useGetSubBuildingListQuery(
+    {},
+    {
+      skip: !Object.keys(RoomData).length,
+    }
+  );
 
   const onSubmit = async (data: FormValues) => {
     const reqObject = {
@@ -80,26 +94,43 @@ const AddRooms = (props: any) => {
     if (RoomData?.id) {
       setValue("room", RoomData.name);
       setValue("description", RoomData.description);
-      // let currentSubBuilding = subBuildingList?.data?.find(
-      //   (item: any) => item.id === RoomData.sub_building
-      // );
+      const labelObj = alllevelListData?.data?.find(
+        (item: any) => item.id === RoomData.level_id
+      );
+      const subBuildingObj = allSubBuildingListData?.data?.find(
+        (item: any) => item.id === labelObj?.sub_building_id
+      );
+      const buildingObj = buildingList?.data?.find(
+        (item: any) => item.id === subBuildingObj?.building_id
+      );
 
-      // setValue("building", {
-      //   label: RoomData.buildingName,
-      //   value: RoomData.buildingId,
-      // });
-      // setValue("sub_building", {
-      //   label: RoomData.subBuildingName,
-      //   value: RoomData.subBuildingId,
-      // });
-      // setValue("levels", {
-      //   label: RoomData.levelName,
-      //   value: RoomData.levelId,
-      // });
+      const newLevel = {
+        label: labelObj?.name,
+        value: labelObj?.id,
+      };
+      const newSubBuilding = {
+        label: subBuildingObj?.type,
+        value: subBuildingObj?.id,
+      };
+      const newBuilding = {
+        label: buildingObj?.type,
+        value: buildingObj?.id,
+      };
+
+      setValue("levels", newLevel);
+      setValue("sub_building", newSubBuilding);
+      setValue("building", newBuilding);
     } else {
       reset();
     }
-  }, [RoomData, setValue, reset]);
+  }, [
+    RoomData,
+    setValue,
+    reset,
+    alllevelListData,
+    allSubBuildingListData,
+    buildingList,
+  ]);
 
   const buildingOptions = (buildingList?.data || []).map((item: any) => ({
     label: item.type || "Unknown",
@@ -212,7 +243,7 @@ const AddRooms = (props: any) => {
             {/* Submit Button */}
             <Box>
               <Button type="submit" size="large" variant="contained" fullWidth>
-                Submit
+                {RoomData?.id ? "Update Room" : "Add Room"}
               </Button>
             </Box>
           </form>

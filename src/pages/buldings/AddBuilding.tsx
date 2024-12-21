@@ -18,7 +18,6 @@ const AddBuilding = (props: any) => {
   const { setOpen, currentBuilding } = props;
   const [AddBuildingData] = useAddBuildingMutation();
   const [UpdateBuildingData] = useUpdateBuildingMutation();
-
   const methods = useForm<FormValues>();
   const { reset, handleSubmit, setValue } = methods;
 
@@ -104,7 +103,7 @@ const AddBuilding = (props: any) => {
           {/* Submit Button */}
           <Box>
             <Button type="submit" size="large" variant="contained" fullWidth>
-              {currentBuilding?.id ? "Update" : "Submit"}
+              {currentBuilding?.id ? "Update Building" : "Add Building"}
             </Button>
           </Box>
         </form>

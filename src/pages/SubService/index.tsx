@@ -17,23 +17,26 @@ import { useState } from "react";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
 import {
-  useDeleteSubBuildingMutation,
-  useGetSubBuildingListQuery,
+  useDeleteSubServiceMutation,
+  useGetSubServiceListQuery,
 } from "../../redux/api/api";
 import { toast } from "react-toastify";
 import AddSubService from "./AddSubService";
+import CustomSkeleton from "../../components/CustomSkeleton";
 
 const SubService = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const { data: subBuildingDataList } = useGetSubBuildingListQuery({});
-  const [subBuildingId, setSubBuildingId] = useState<string>("");
-  const [updateSubBuildingId, setUpdateSubBuildingId] = useState<string>("");
-  const [deleteSubBuilding] = useDeleteSubBuildingMutation();
+  const { data: subServiceDataList, isFetching } = useGetSubServiceListQuery(
+    {}
+  );
+  const [subServiceID, setSubServiceID] = useState<string>("");
+  const [updateSubServiceID, setUpdateSubServiceID] = useState<string>("");
+  const [deleteSubService] = useDeleteSubServiceMutation();
 
   const handleRouteAddBuildings = () => {
     setOpen(true);
-    setUpdateSubBuildingId("");
+    setUpdateSubServiceID("");
   };
 
   const handleCloseDrawer = () => {
@@ -41,22 +44,22 @@ const SubService = () => {
   };
 
   const handleOpenEditModal = (item: any) => {
-    setUpdateSubBuildingId(item);
+    setUpdateSubServiceID(item);
     setOpen(true);
   };
 
-  const handleOpenDeleteSubBuildings = (item: any) => {
-    setSubBuildingId(item.id);
+  const handleOpenDeleteSubServices = (item: any) => {
+    setSubServiceID(item.id);
     setOpenDeleteModal(true);
   };
 
-  const handleDeleteSubBuildings = async () => {
+  const handleDeleteSubServices = async () => {
     const deleteRequestObj = {
-      url: `sub-buildings/${subBuildingId}`,
+      url: `sub-services/${subServiceID}`,
     };
     try {
-      const resp: any = await deleteSubBuilding(deleteRequestObj).unwrap();
-      if (resp.status === 2015) {
+      const resp: any = await deleteSubService(deleteRequestObj).unwrap();
+      if (resp.status === 3015) {
         toast.success(resp.message);
         setOpenDeleteModal(false);
       }
@@ -85,53 +88,57 @@ const SubService = () => {
           Add Sub-Service
         </Button>
       </Box>
-      <Box>
-        <TableContainer
-          component={Paper}
-          sx={{ minWidth: 650, maxHeight: "72vh" }}
-        >
-          <Table size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Sub-Services</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {subBuildingDataList?.data?.map((item: any, index: number) => (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {item.type}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {item.description}
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      aria-label="edit"
-                      color="primary"
-                      onClick={() => handleOpenEditModal(item)}
-                    >
-                      <EditNoteIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      color="warning"
-                      onClick={() => handleOpenDeleteSubBuildings(item)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
+      {isFetching ? (
+        <CustomSkeleton />
+      ) : (
+        <Box>
+          <TableContainer
+            component={Paper}
+            sx={{ minWidth: 650, maxHeight: "72vh" }}
+          >
+            <Table size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Sub-Services</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell align="right">Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+              </TableHead>
+              <TableBody>
+                {subServiceDataList?.data?.map((item: any, index: number) => (
+                  <TableRow
+                    key={index}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {item.name}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {item.description}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        aria-label="edit"
+                        color="primary"
+                        onClick={() => handleOpenEditModal(item)}
+                      >
+                        <EditNoteIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        color="warning"
+                        onClick={() => handleOpenDeleteSubServices(item)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
 
       {/* this is add building form with drawer */}
       <CustomDrawer
@@ -141,13 +148,13 @@ const SubService = () => {
       >
         <AddSubService
           setOpen={setOpen}
-          updateSubBuildingId={updateSubBuildingId}
+          updateSubServiceID={updateSubServiceID}
         />
       </CustomDrawer>
 
       <CustomModal openModal={openDeleteModal}>
         <ConfirmBox
-          handlelogin={handleDeleteSubBuildings}
+          handlelogin={handleDeleteSubServices}
           handleCloselogin={handleCloseDeleteConfirm}
           message="Are you sure, you want to delete this Sub Building?"
         />

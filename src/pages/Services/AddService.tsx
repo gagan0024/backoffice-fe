@@ -3,45 +3,42 @@ import { FormProvider, useForm } from "react-hook-form";
 import RHFTextField from "../../components/RHF/RHFTextField";
 import CloseIcon from "@mui/icons-material/Close";
 import {
-  useAddBuildingMutation,
-  useUpdateBuildingMutation,
+  useAddServiceMutation,
+  useUpdateServiceMutation,
 } from "../../redux/api/api";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
 interface FormValues {
-  type: string;
+  name: string;
   description: string;
 }
 
 const AddService = (props: any) => {
-  const { setOpen, currentBuilding } = props;
-  const [AddBuildingData] = useAddBuildingMutation();
-  const [UpdateBuildingData] = useUpdateBuildingMutation();
-
+  const { setOpen, currentService } = props;
+  const [AddServiceData] = useAddServiceMutation();
+  const [UpdateServiceData] = useUpdateServiceMutation();
   const methods = useForm<FormValues>();
   const { reset, handleSubmit, setValue } = methods;
 
   const onSubmit = async (data: FormValues) => {
     const reqObject = {
-      url: currentBuilding?.id
-        ? `buildings/${currentBuilding.id}`
-        : "buildings",
+      url: currentService?.id ? `services/${currentService.id}` : "services",
       body: {
-        type: data.type,
+        name: data.name,
         description: data.description,
       },
     };
     try {
-      if (currentBuilding?.id) {
-        const resp: any = await UpdateBuildingData(reqObject).unwrap();
-        if (resp.status === 2002) {
-          toast.success("Building updated successfully");
+      if (currentService?.id) {
+        const resp: any = await UpdateServiceData(reqObject).unwrap();
+        if (resp.status === 3004) {
+          toast.success(resp.message);
         }
       } else {
-        const resp: any = await AddBuildingData(reqObject).unwrap();
-        if (resp.status === 2001) {
-          toast.success("Building added successfully");
+        const resp: any = await AddServiceData(reqObject).unwrap();
+        if (resp.status === 3001) {
+          toast.success(resp.message);
         }
       }
       reset();
@@ -52,13 +49,13 @@ const AddService = (props: any) => {
   };
 
   useEffect(() => {
-    if (currentBuilding?.id) {
-      setValue("type", currentBuilding.type);
-      setValue("description", currentBuilding.description);
+    if (currentService?.id) {
+      setValue("name", currentService.name);
+      setValue("description", currentService.description);
     } else {
       reset();
     }
-  }, [currentBuilding, setValue, reset]);
+  }, [currentService, setValue, reset]);
 
   const handleCloseModal = () => {
     setOpen(false);
@@ -70,7 +67,7 @@ const AddService = (props: any) => {
       {/* Header */}
       <Box className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold">
-          {currentBuilding?.id ? "Update Service" : "Add Service"}
+          {currentService?.id ? "Update Service" : "Add Service"}
         </h2>
         <IconButton onClick={handleCloseModal}>
           <CloseIcon />
@@ -86,8 +83,8 @@ const AddService = (props: any) => {
           <Box className="flex flex-col gap-4">
             {/* Sub-Building Type Field */}
             <RHFTextField
-              name="type"
-              label="Building Type"
+              name="name"
+              label="Service"
               rules={{ required: "This field is required" }}
             />
 
@@ -104,7 +101,7 @@ const AddService = (props: any) => {
           {/* Submit Button */}
           <Box>
             <Button type="submit" size="large" variant="contained" fullWidth>
-              {currentBuilding?.id ? "Update" : "Submit"}
+              {currentService?.id ? "Update Service" : "Add Service"}
             </Button>
           </Box>
         </form>

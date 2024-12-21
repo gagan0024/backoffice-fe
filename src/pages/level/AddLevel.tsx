@@ -112,7 +112,9 @@ const AddLevels = (props: any) => {
     <>
       <Box className="w-full bg-white">
         <Box className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold">Add Level</h2>
+          <h2 className="text-2xl font-bold">
+            {updatelevelsObj.id ? "Update Level" : "Add Level"}
+          </h2>
           <IconButton onClick={handleCloseModalForAddBuildings}>
             <CloseIcon />
           </IconButton>
@@ -148,7 +150,9 @@ const AddLevels = (props: any) => {
                   <RHFAutocomplete
                     name="sub_building_id"
                     options={
-                      buildingID && subBuildingObj[buildingID?.value]
+                      buildingID &&
+                      subBuildingObj &&
+                      subBuildingObj[buildingID?.value]
                         ? subBuildingObj[buildingID?.value]
                         : []
                     }
@@ -184,7 +188,7 @@ const AddLevels = (props: any) => {
             </Box>
             <Box>
               <Button type="submit" size="large" variant="contained" fullWidth>
-                Submit
+                {updatelevelsObj.id ? "Update Level" : "Add Level"}
               </Button>
             </Box>
           </form>

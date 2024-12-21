@@ -6,46 +6,46 @@ import { FormProvider, useForm } from "react-hook-form";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   useAddSubBuildingMutation,
-  useGetBuildingListQuery,
+  useGetSubServiceListQuery,
   useUpdateSubBuildingMutation,
 } from "../../redux/api/api";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
 interface FormValues {
-  building_id: any;
-  type: string;
+  service: any;
+  name: string;
   description: string;
 }
 
 const AddSubService = (props: any) => {
-  const { setOpen, updateSubBuildingId } = props;
+  const { setOpen, updateSubServiceID } = props;
   const methods = useForm<FormValues>();
   const { reset, handleSubmit, setValue } = methods;
   const [addSubBuilding] = useAddSubBuildingMutation();
   const [updateSubBuilding] = useUpdateSubBuildingMutation();
-  const { data: buildingList } = useGetBuildingListQuery({});
+  const { data: serviceList } = useGetSubServiceListQuery({});
 
   const onSubmit = async (data: FormValues) => {
     const reqObject = {
-      url: updateSubBuildingId?.id
-        ? `sub-buildings/${updateSubBuildingId.id}`
-        : "sub-buildings",
+      url: updateSubServiceID?.id
+        ? `sub-services/${updateSubServiceID.id}`
+        : "sub-services",
       body: {
-        building_id: data.building_id.value,
-        type: data.type,
+        service_id: data.service.value,
+        name: data.name,
         description: data.description,
       },
     };
     try {
-      if (updateSubBuildingId?.id) {
+      if (updateSubServiceID?.id) {
         const resp: any = await updateSubBuilding(reqObject).unwrap();
-        if (resp.status === 2014) {
+        if (resp.status === 3014) {
           toast.success(resp.message);
         }
       } else {
         const resp: any = await addSubBuilding(reqObject).unwrap();
-        if (resp.status === 2011) {
+        if (resp.status === 3011) {
           toast.success(resp.message);
         }
       }
@@ -58,21 +58,21 @@ const AddSubService = (props: any) => {
 
   // Pre-fill form fields when editing
   useEffect(() => {
-    if (updateSubBuildingId?.id) {
-      let tempType = buildingList?.data?.find(
-        (item: any) => item.id === updateSubBuildingId.building_id
+    if (updateSubServiceID?.id) {
+      let tempType = serviceList?.data?.find(
+        (item: any) => item.service_id === updateSubServiceID.service_id
       );
       let newObj = {
-        label: tempType?.type,
+        label: tempType?.name,
         value: tempType?.id,
       };
-      setValue("type", updateSubBuildingId.type);
-      setValue("description", updateSubBuildingId.description);
-      setValue("building_id", newObj);
+      setValue("name", updateSubServiceID.name);
+      setValue("description", updateSubServiceID.description);
+      setValue("service", newObj);
     } else {
       reset();
     }
-  }, [updateSubBuildingId.id, setValue, reset, buildingList]);
+  }, [updateSubServiceID.id, setValue, reset, serviceList]);
 
   const handleCloseModalForAddBuildings = () => {
     setOpen(false);
@@ -84,7 +84,7 @@ const AddSubService = (props: any) => {
       {/* Header */}
       <Box className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold">
-          {updateSubBuildingId?.id ? "Edit Sub-Service" : "Add Sub-Service"}
+          {updateSubServiceID?.id ? "Edit Sub-Service" : "Add Sub-Service"}
         </h2>
         <IconButton onClick={handleCloseModalForAddBuildings}>
           <CloseIcon />
@@ -100,10 +100,10 @@ const AddSubService = (props: any) => {
           <Box className="flex flex-col gap-4">
             <FormControl fullWidth>
               <RHFAutocomplete
-                name="building_id"
+                name="service"
                 options={
-                  buildingList?.data?.map((item: any) => ({
-                    label: item.type || "Unknown",
+                  serviceList?.data?.map((item: any) => ({
+                    label: item.name || "Unknown",
                     value: item.id,
                   })) || []
                 }
@@ -111,15 +111,15 @@ const AddSubService = (props: any) => {
                 isOptionEqualToValue={(option: any, value: any) =>
                   option?.value === value?.value
                 }
-                label="Building"
+                label="Service"
                 rules={{ required: "This field is required" }}
               />
             </FormControl>
 
             {/* Sub-Building Type Field */}
             <RHFTextField
-              name="type"
-              label="Sub-Building Type"
+              name="name"
+              label="Sub-Service"
               rules={{
                 required: "This field is required",
               }}
@@ -140,7 +140,7 @@ const AddSubService = (props: any) => {
           {/* Submit Button */}
           <Box>
             <Button type="submit" size="large" variant="contained" fullWidth>
-              {updateSubBuildingId?.id ? "Update" : "Submit"}
+              {updateSubServiceID?.id ? "Edit Sub-Service" : "Add Sub-Service"}
             </Button>
           </Box>
         </form>

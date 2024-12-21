@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   List,
@@ -8,18 +8,19 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import { Home, LocationOn, Apartment } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import CategoryIcon from "@mui/icons-material/Category";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import HouseIcon from "@mui/icons-material/House";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import DynamicFormIcon from "@mui/icons-material/DynamicForm";
-import SettingsIcon from '@mui/icons-material/Settings';
-import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import SettingsIcon from "@mui/icons-material/Settings";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 
 const SideBar = () => {
-  const [selectedItem, setSelectedItem] = useState<string>("Home");
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current route
+  const [selectedItem, setSelectedItem] = useState<string>("");
 
   // Define the menu items with icons and routes
   const menuItems = [
@@ -30,7 +31,11 @@ const SideBar = () => {
     { name: "Levels", icon: <ViewStreamIcon />, route: "/levels" },
     { name: "Rooms", icon: <HouseIcon />, route: "/rooms" },
     { name: "Services", icon: <SettingsIcon />, route: "/services" },
-    { name: "Sub-Services", icon: <SettingsSuggestIcon />, route: "/sub-services" },
+    {
+      name: "Sub-Services",
+      icon: <SettingsSuggestIcon />,
+      route: "/sub-services",
+    },
     { name: "Products", icon: <InventoryIcon />, route: "/product" },
     {
       name: "Final Design Form",
@@ -38,6 +43,16 @@ const SideBar = () => {
       route: "/final-design-form",
     },
   ];
+
+  // Update selected item based on the current route
+  useEffect(() => {
+    const currentMenuItem = menuItems.find(
+      (item) => item.route === location.pathname
+    );
+    if (currentMenuItem) {
+      setSelectedItem(currentMenuItem.name);
+    }
+  }, [location.pathname]); // Runs whenever the path changes
 
   return (
     <Box
@@ -67,7 +82,6 @@ const SideBar = () => {
               sx={{
                 backgroundColor:
                   selectedItem === item.name ? "#555" : "transparent",
-                borderRadius: "4px",
               }}
             >
               <ListItemIcon

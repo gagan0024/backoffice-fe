@@ -24,6 +24,7 @@ import RHFTextField from "../../components/RHF/RHFTextField";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
 import { useGetProductListQuery } from "../../redux/api/api";
+import CustomSkeleton from "../../components/CustomSkeleton";
 
 const top100Films = [{ title: "Ground floor" }];
 
@@ -35,7 +36,7 @@ const Product = () => {
   const [productTypeArray, setProductTypeArray] = useState<string[]>([]);
   const [vendorArray, setVendorArray] = useState<string[]>([]);
   const { setValue, control } = methods;
-  const { data: productDataList } = useGetProductListQuery({});
+  const { data: productDataList, isFetching } = useGetProductListQuery({});
 
   const handleProductTypeChange = (event: any, newValue: string[]) => {
     setProductTypeArray(newValue);
@@ -97,45 +98,49 @@ const Product = () => {
         </Button>
       </Box>
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Products</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {productDataList?.data?.map((item: any, index: any) => (
-              <TableRow
-                key={index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" className="capitalize">
-                  {item.name}
-                </TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    aria-label="edit"
-                    color="primary"
-                    onClick={() => handleEditLocation(item)}
-                  >
-                    <EditNoteIcon />
-                  </IconButton>
-
-                  <IconButton
-                    aria-label="delete"
-                    color="warning"
-                    onClick={() => handleOpenDeleteBox(item)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+      {isFetching ? (
+        <CustomSkeleton />
+      ) : (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Products</TableCell>
+                <TableCell align="right">Actions</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {productDataList?.data?.map((item: any, index: any) => (
+                <TableRow
+                  key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row" className="capitalize">
+                    {item.name}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      aria-label="edit"
+                      color="primary"
+                      onClick={() => handleEditLocation(item)}
+                    >
+                      <EditNoteIcon />
+                    </IconButton>
+
+                    <IconButton
+                      aria-label="delete"
+                      color="warning"
+                      onClick={() => handleOpenDeleteBox(item)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
 
       <CustomDrawer
         open={open}
@@ -145,7 +150,7 @@ const Product = () => {
         <Box className="flex flex-col gap-8">
           <Box className="flex justify-between items-center">
             <h2 className="text-2xl font-bold">
-              {isEditing ? "Edit Product" : "Add Product"}
+              {isEditing ? "Update Product" : "Add Product"}
             </h2>
             <IconButton onClick={handleCloseModalForAddLocation}>
               <CloseIcon />
@@ -275,7 +280,7 @@ const Product = () => {
                 />
               </Box>
               <Button variant="contained" fullWidth size="large" type="submit">
-                {isEditing ? "Update" : "Submit"}
+                {isEditing ? "Update Product" : "Add Product"}
               </Button>
             </form>
           </FormProvider>

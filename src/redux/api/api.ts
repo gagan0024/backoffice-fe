@@ -237,7 +237,6 @@ export const api = createApi({
       invalidatesTags: ["Product"],
     }),
 
-
     updateProduct: builder.mutation<any, any>({
       query: (data: any) => ({
         url: `${apiRoot}${data.url}`,
@@ -249,19 +248,72 @@ export const api = createApi({
 
     getServiceList: builder.query<any, any>({
       query: () => ({
-        url: `${apiRoot}levels`,
+        url: `${apiRoot}services`,
         method: "GET",
       }),
       providesTags: ["Service"],
     }),
 
+    addService: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["Service"],
+    }),
+
+    updateService: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "PATCH",
+        body: data.body,
+      }),
+      invalidatesTags: ["Service"],
+    }),
+
+    deleteService: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Service"],
+    }),
+
     getSubServiceList: builder.query<any, any>({
       query: () => ({
-        url: `${apiRoot}levels`,
+        url: `${apiRoot}sub-services`,
         method: "GET",
       }),
       providesTags: ["SubService"],
     }),
+
+    addSubService: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["SubService"],
+    }),
+
+    updateSubService: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "PATCH",
+        body: data.body,
+      }),
+      invalidatesTags: ["SubService"],
+    }),
+
+    deleteSubService: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["SubService"],
+    }),
+
   }),
 });
 
@@ -294,5 +346,11 @@ export const {
   useGetLevelsListByIDQuery,
   useAddProductMutation,
   useDeleteProductMutation,
-  useUpdateProductMutation
+  useUpdateProductMutation,
+  useAddServiceMutation,
+  useAddSubServiceMutation,
+  useDeleteServiceMutation,
+  useDeleteSubServiceMutation,
+  useUpdateServiceMutation,
+  useUpdateSubServiceMutation
 } = api;

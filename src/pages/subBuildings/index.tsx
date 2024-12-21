@@ -22,18 +22,21 @@ import {
   useGetSubBuildingListQuery,
 } from "../../redux/api/api";
 import { toast } from "react-toastify";
+import CustomSkeleton from "../../components/CustomSkeleton";
 
 const SubBuildings = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const { data: subBuildingDataList } = useGetSubBuildingListQuery({});
+  const { data: subBuildingDataList, isFetching } = useGetSubBuildingListQuery(
+    {}
+  );
   const [subBuildingId, setSubBuildingId] = useState<string>("");
   const [updateSubBuildingId, setUpdateSubBuildingId] = useState<string>("");
   const [deleteSubBuilding] = useDeleteSubBuildingMutation();
 
   const handleRouteAddBuildings = () => {
     setOpen(true);
-    setUpdateSubBuildingId("")
+    setUpdateSubBuildingId("");
   };
 
   const handleCloseDrawer = () => {
@@ -85,53 +88,57 @@ const SubBuildings = () => {
           Add Sub-Building
         </Button>
       </Box>
-      <Box>
-        <TableContainer
-          component={Paper}
-          sx={{ minWidth: 650, maxHeight: "72vh" }}
-        >
-          <Table size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Sub-Buildings</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {subBuildingDataList?.data?.map((item: any, index: number) => (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {item.type}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {item.description}
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      aria-label="edit"
-                      color="primary"
-                      onClick={() => handleOpenEditModal(item)}
-                    >
-                      <EditNoteIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      color="warning"
-                      onClick={() => handleOpenDeleteSubBuildings(item)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
+      {isFetching ? (
+        <CustomSkeleton />
+      ) : (
+        <Box>
+          <TableContainer
+            component={Paper}
+            sx={{ minWidth: 650, maxHeight: "70vh" }}
+          >
+            <Table size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Sub-Buildings</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell align="right">Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+              </TableHead>
+              <TableBody>
+                {subBuildingDataList?.data?.map((item: any, index: number) => (
+                  <TableRow
+                    key={index}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {item.type}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {item.description}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        aria-label="edit"
+                        color="primary"
+                        onClick={() => handleOpenEditModal(item)}
+                      >
+                        <EditNoteIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        color="warning"
+                        onClick={() => handleOpenDeleteSubBuildings(item)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
 
       {/* this is add building form with drawer */}
       <CustomDrawer
