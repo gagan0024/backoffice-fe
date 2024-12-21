@@ -1,9 +1,6 @@
 import {
-  Autocomplete,
   Box,
   Button,
-  Chip,
-  FormControl,
   IconButton,
   Paper,
   Table,
@@ -15,40 +12,25 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import CloseIcon from "@mui/icons-material/Close";
 import CustomDrawer from "../../components/CustomDrawer";
-import { FormProvider, useForm, Controller } from "react-hook-form";
 import { useState } from "react";
-import RHFAutocomplete from "../../components/RHF/RHFAutocomplete";
-import RHFTextField from "../../components/RHF/RHFTextField";
 import CustomModal from "../../components/CustomModal";
 import ConfirmBox from "../../components/ConfirmBox";
-import { useGetProductListQuery } from "../../redux/api/api";
+import {
+  useDeleteProductMutation,
+  useGetProductListQuery,
+} from "../../redux/api/api";
 import CustomSkeleton from "../../components/CustomSkeleton";
-
-const top100Films = [{ title: "Ground floor" }];
+import AddProduct from "./AddProduct";
+import { toast } from "react-toastify";
 
 const Product = () => {
-  const methods = useForm();
   const [open, setOpen] = useState<boolean>(false);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const [productTypeArray, setProductTypeArray] = useState<string[]>([]);
-  const [vendorArray, setVendorArray] = useState<string[]>([]);
-  const { setValue, control } = methods;
   const { data: productDataList, isFetching } = useGetProductListQuery({});
-
-  const handleProductTypeChange = (event: any, newValue: string[]) => {
-    setProductTypeArray(newValue);
-    setValue("product-type", newValue);
-    console.log(event);
-  };
-
-  const handleVendorChange = (event: any, newValue: string[]) => {
-    setVendorArray(newValue);
-    setValue("vendor", newValue);
-    console.log(event);
-  };
+  const [productData, setProductData] = useState<object>({});
+  const [productDataDelete, setProductDataDelete] = useState<object>({});
+  const [deleteProduct] = useDeleteProductMutation();
 
   const handleCloseModalForAddLocation = () => {
     setOpen(false);
@@ -57,24 +39,30 @@ const Product = () => {
   const handleOpenModalForAddLocation = () => {
     setOpen(true);
   };
+
   const handleEditLocation = (item: any) => {
-    console.log(item);
-    setIsEditing(true);
+    setProductData(item);
     setOpen(true);
   };
+
   const handleOpenDeleteBox = (item: any) => {
-    console.log(item);
+    setProductDataDelete(item.id);
     setOpenDeleteModal(true);
   };
 
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-    console.log("Product Type Array:", productTypeArray);
-    console.log("Vendor Array:", vendorArray);
-  };
-
-  const handleDeleteProducts = () => {
-    alert("Please Integrate API");
+  const handleDeleteProducts = async() => {
+    const deleteRequestObj = {
+      url: `products/${productDataDelete}`,
+    };
+    try {
+      const resp: any = await deleteProduct(deleteRequestObj).unwrap();
+      if (resp.status === 4005) {
+        toast.success(resp.message);
+        setOpenDeleteModal(false);
+      }
+    } catch (error) {
+      toast.error("Failed to delete Product");
+    }
     setOpenDeleteModal(false);
   };
 
@@ -147,144 +135,7 @@ const Product = () => {
         setOpen={setOpen}
         closeDrawer={handleCloseModalForAddLocation}
       >
-        <Box className="flex flex-col gap-8">
-          <Box className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">
-              {isEditing ? "Update Product" : "Add Product"}
-            </h2>
-            <IconButton onClick={handleCloseModalForAddLocation}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-          <FormProvider {...methods}>
-            <form
-              className="flex flex-col gap-6"
-              onSubmit={methods.handleSubmit(onSubmit)}
-            >
-              <Box className="flex items-center gap-4">
-                <FormControl fullWidth>
-                  <RHFAutocomplete
-                    name="service"
-                    options={["Option 1", "Option 2", "Option 3"]}
-                    label="Service"
-                    rules={{ required: "This field is required" }}
-                  />
-                </FormControl>
-
-                <FormControl fullWidth>
-                  <RHFAutocomplete
-                    name="sub-service"
-                    options={["Option 1", "Option 2", "Option 3"]}
-                    label="Sub Service"
-                    rules={{ required: "This field is required" }}
-                  />
-                </FormControl>
-              </Box>
-
-              <Box className="flex flex-col gap-4">
-                <RHFTextField
-                  name="product-name"
-                  label="Product Name"
-                  rules={{
-                    required: "This field is required",
-                  }}
-                />
-
-                <Controller
-                  name="product-type"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      {...field}
-                      multiple
-                      options={top100Films.map((option) => option.title)}
-                      value={productTypeArray}
-                      onChange={handleProductTypeChange}
-                      freeSolo
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip
-                            variant="outlined"
-                            label={option}
-                            {...getTagProps({ index })}
-                          />
-                        ))
-                      }
-                      renderInput={(params) => (
-                        <RHFTextField
-                          {...params}
-                          name="product-type"
-                          label="Product Type"
-                          rules={{
-                            required: "This field is required",
-                          }}
-                        />
-                      )}
-                    />
-                  )}
-                />
-              </Box>
-
-              <Box className="flex gap-4 items-center">
-                <RHFTextField
-                  name="capacity"
-                  label="Capacity"
-                  rules={{
-                    required: "This field is required",
-                  }}
-                />
-
-                <FormControl fullWidth>
-                  <RHFAutocomplete
-                    name="unit"
-                    options={["Option 1", "Option 2", "Option 3"]}
-                    label="Unit"
-                    rules={{ required: "This field is required" }}
-                  />
-                </FormControl>
-              </Box>
-
-              <Box>
-                <Controller
-                  name="vendor"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      {...field}
-                      multiple
-                      options={top100Films.map((option) => option.title)}
-                      value={vendorArray}
-                      onChange={handleVendorChange}
-                      freeSolo
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip
-                            variant="outlined"
-                            label={option}
-                            {...getTagProps({ index })}
-                          />
-                        ))
-                      }
-                      renderInput={(params) => (
-                        <RHFTextField
-                          {...params}
-                          name="vendor"
-                          label="Vendor"
-                          rules={{
-                            required: "This field is required",
-                          }}
-                        />
-                      )}
-                    />
-                  )}
-                />
-              </Box>
-              <Button variant="contained" fullWidth size="large" type="submit">
-                {isEditing ? "Update Product" : "Add Product"}
-              </Button>
-            </form>
-          </FormProvider>
-        </Box>
+        <AddProduct setOpen={setOpen} productData={productData} />
       </CustomDrawer>
 
       <CustomModal openModal={openDeleteModal}>

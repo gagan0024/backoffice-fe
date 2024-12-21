@@ -246,6 +246,14 @@ export const api = createApi({
       invalidatesTags: ["Product"],
     }),
 
+    getSubServiceListByID: builder.query<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}sub-services?service_id=${data.service_id}`,
+        method: "GET",
+      }),
+      providesTags: ["Product"],
+    }),
+
     getServiceList: builder.query<any, any>({
       query: () => ({
         url: `${apiRoot}services`,
@@ -313,7 +321,6 @@ export const api = createApi({
       }),
       invalidatesTags: ["SubService"],
     }),
-
   }),
 });
 
@@ -352,5 +359,6 @@ export const {
   useDeleteServiceMutation,
   useDeleteSubServiceMutation,
   useUpdateServiceMutation,
-  useUpdateSubServiceMutation
+  useUpdateSubServiceMutation,
+  useGetSubServiceListByIDQuery,
 } = api;

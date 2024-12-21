@@ -5,9 +5,9 @@ import RHFTextField from "../../components/RHF/RHFTextField";
 import { FormProvider, useForm } from "react-hook-form";
 import CloseIcon from "@mui/icons-material/Close";
 import {
-  useAddSubBuildingMutation,
-  useGetSubServiceListQuery,
-  useUpdateSubBuildingMutation,
+  useAddSubServiceMutation,
+  useGetServiceListQuery,
+  useUpdateSubServiceMutation,
 } from "../../redux/api/api";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
@@ -22,9 +22,9 @@ const AddSubService = (props: any) => {
   const { setOpen, updateSubServiceID } = props;
   const methods = useForm<FormValues>();
   const { reset, handleSubmit, setValue } = methods;
-  const [addSubBuilding] = useAddSubBuildingMutation();
-  const [updateSubBuilding] = useUpdateSubBuildingMutation();
-  const { data: serviceList } = useGetSubServiceListQuery({});
+  const [addSubBuilding] = useAddSubServiceMutation();
+  const [updateSubBuilding] = useUpdateSubServiceMutation();
+  const { data: serviceList } = useGetServiceListQuery({});
 
   const onSubmit = async (data: FormValues) => {
     const reqObject = {
@@ -60,7 +60,7 @@ const AddSubService = (props: any) => {
   useEffect(() => {
     if (updateSubServiceID?.id) {
       let tempType = serviceList?.data?.find(
-        (item: any) => item.service_id === updateSubServiceID.service_id
+        (item: any) => item.id === updateSubServiceID.service_id
       );
       let newObj = {
         label: tempType?.name,
