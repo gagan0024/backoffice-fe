@@ -19,7 +19,12 @@ const AddService = (props: any) => {
   const [AddServiceData] = useAddServiceMutation();
   const [UpdateServiceData] = useUpdateServiceMutation();
   const methods = useForm<FormValues>();
-  const { reset, handleSubmit, setValue } = methods;
+  const {
+    reset,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = methods;
 
   const onSubmit = async (data: FormValues) => {
     const reqObject = {
@@ -100,7 +105,13 @@ const AddService = (props: any) => {
 
           {/* Submit Button */}
           <Box>
-            <Button type="submit" size="large" variant="contained" fullWidth>
+            <Button
+              type="submit"
+              size="large"
+              variant="contained"
+              fullWidth
+              disabled={isSubmitting ? true : false}
+            >
               {currentService?.id ? "Update Service" : "Add Service"}
             </Button>
           </Box>

@@ -48,7 +48,7 @@ const Locations = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
     setValue,
   } = useForm<FormValues>();
@@ -215,7 +215,13 @@ const Locations = () => {
               error={!!errors.name}
               helperText={errors.name ? String(errors.name.message) : undefined}
             />
-            <Button variant="contained" fullWidth size="large" type="submit">
+            <Button
+              variant="contained"
+              fullWidth
+              size="large"
+              type="submit"
+              disabled={isSubmitting ? true : false}
+            >
               {isEditing ? "Update Location" : "Add Location"}
             </Button>
           </form>
@@ -226,6 +232,7 @@ const Locations = () => {
         <ConfirmBox
           handlelogin={handleDeleteLocation}
           handleCloselogin={handleCloseDeleteBox}
+          isSubmitting={isSubmitting}
           message="Are you sure, you want to delete this location?"
         />
       </CustomModal>

@@ -1,7 +1,12 @@
 import { Box, Button } from "@mui/material";
+import { useForm } from "react-hook-form";
 
 const ConfirmBox = (props: any) => {
-  const { handlelogin, handleCloselogin,message } = props;
+  const { handlelogin, handleCloselogin, message } = props;
+  const methods = useForm();
+  const {
+    formState: { isSubmitting },
+  } = methods;
   return (
     <>
       <Box className="flex flex-col gap-8 text-center">
@@ -12,6 +17,7 @@ const ConfirmBox = (props: any) => {
             variant="contained"
             size="large"
             onClick={handlelogin}
+            disabled={isSubmitting ? true : false}
             fullWidth
           >
             Yes

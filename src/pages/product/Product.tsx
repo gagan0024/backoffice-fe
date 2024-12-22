@@ -50,7 +50,7 @@ const Product = () => {
     setOpenDeleteModal(true);
   };
 
-  const handleDeleteProducts = async() => {
+  const handleDeleteProducts = async () => {
     const deleteRequestObj = {
       url: `products/${productDataDelete}`,
     };
@@ -89,8 +89,11 @@ const Product = () => {
       {isFetching ? (
         <CustomSkeleton />
       ) : (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <TableContainer
+          component={Paper}
+          sx={{ minWidth: 650, maxHeight: "70vh" }}
+        >
+          <Table size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <TableCell>Products</TableCell>

@@ -22,7 +22,13 @@ interface FormValues {
 const AddLevels = (props: any) => {
   const { setOpen, updatelevelsObj } = props;
   const methods = useForm<FormValues>();
-  const { reset, handleSubmit, setValue, watch } = methods;
+  const {
+    reset,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { isSubmitting },
+  } = methods;
   const [addLevels] = useAddLevelsMutation();
   const [updateLevels] = useUpdateLevelsMutation();
   const { data: buildingList } = useGetBuildingListQuery({});
@@ -187,7 +193,13 @@ const AddLevels = (props: any) => {
               </Box>
             </Box>
             <Box>
-              <Button type="submit" size="large" variant="contained" fullWidth>
+              <Button
+                type="submit"
+                size="large"
+                variant="contained"
+                fullWidth
+                disabled={isSubmitting ? true : false}
+              >
                 {updatelevelsObj.id ? "Update Level" : "Add Level"}
               </Button>
             </Box>

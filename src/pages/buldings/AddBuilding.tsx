@@ -19,7 +19,12 @@ const AddBuilding = (props: any) => {
   const [AddBuildingData] = useAddBuildingMutation();
   const [UpdateBuildingData] = useUpdateBuildingMutation();
   const methods = useForm<FormValues>();
-  const { reset, handleSubmit, setValue } = methods;
+  const {
+    reset,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = methods;
 
   const onSubmit = async (data: FormValues) => {
     const reqObject = {
@@ -102,7 +107,13 @@ const AddBuilding = (props: any) => {
 
           {/* Submit Button */}
           <Box>
-            <Button type="submit" size="large" variant="contained" fullWidth>
+            <Button
+              type="submit"
+              size="large"
+              variant="contained"
+              fullWidth
+              disabled={isSubmitting ? true : false}
+            >
               {currentBuilding?.id ? "Update Building" : "Add Building"}
             </Button>
           </Box>

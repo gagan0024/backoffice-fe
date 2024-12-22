@@ -15,7 +15,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = async (data: any) => {
@@ -105,11 +105,11 @@ const Login = () => {
               color="primary"
               fullWidth
               sx={{ mb: 3 }}
+              disabled={isSubmitting ? true : false}
             >
               Signin
             </Button>
           </form>
-
         </Grid>
 
         {/* Right Section */}

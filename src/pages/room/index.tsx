@@ -92,7 +92,7 @@ const Rooms = () => {
         <Box>
           <TableContainer
             component={Paper}
-            sx={{ minWidth: 650, height: "72vh" }}
+            sx={{ minWidth: 650, maxHeight: "70vh" }}
           >
             <Table size="small" aria-label="a dense table">
               <TableHead>

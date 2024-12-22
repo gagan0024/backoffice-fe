@@ -21,7 +21,12 @@ interface FormValues {
 const AddSubBuildings = (props: any) => {
   const { setOpen, updateSubBuildingId } = props;
   const methods = useForm<FormValues>();
-  const { reset, handleSubmit, setValue } = methods;
+  const {
+    reset,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = methods;
   const [addSubBuilding] = useAddSubBuildingMutation();
   const [updateSubBuilding] = useUpdateSubBuildingMutation();
   const { data: buildingList } = useGetBuildingListQuery({});
@@ -139,8 +144,16 @@ const AddSubBuildings = (props: any) => {
 
           {/* Submit Button */}
           <Box>
-            <Button type="submit" size="large" variant="contained" fullWidth>
-              {updateSubBuildingId?.id ? "Update Sub Building" : "Add Sub Building"}
+            <Button
+              type="submit"
+              size="large"
+              variant="contained"
+              fullWidth
+              disabled={isSubmitting ? true : false}
+            >
+              {updateSubBuildingId?.id
+                ? "Update Sub Building"
+                : "Add Sub Building"}
             </Button>
           </Box>
         </form>

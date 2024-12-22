@@ -21,7 +21,12 @@ interface FormValues {
 const AddSubService = (props: any) => {
   const { setOpen, updateSubServiceID } = props;
   const methods = useForm<FormValues>();
-  const { reset, handleSubmit, setValue } = methods;
+  const {
+    reset,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = methods;
   const [addSubBuilding] = useAddSubServiceMutation();
   const [updateSubBuilding] = useUpdateSubServiceMutation();
   const { data: serviceList } = useGetServiceListQuery({});
@@ -139,7 +144,13 @@ const AddSubService = (props: any) => {
 
           {/* Submit Button */}
           <Box>
-            <Button type="submit" size="large" variant="contained" fullWidth>
+            <Button
+              type="submit"
+              size="large"
+              variant="contained"
+              fullWidth
+              disabled={isSubmitting ? true : false}
+            >
               {updateSubServiceID?.id ? "Edit Sub-Service" : "Add Sub-Service"}
             </Button>
           </Box>

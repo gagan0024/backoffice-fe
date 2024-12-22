@@ -31,7 +31,13 @@ interface FormValues {
 const AddProduct = (props: any) => {
   const { setOpen, productData } = props;
   const methods = useForm<FormValues>();
-  const { setValue, control, watch, reset } = methods;
+  const {
+    setValue,
+    control,
+    watch,
+    reset,
+    formState: { isSubmitting },
+  } = methods;
   const [productTypeArray, setProductTypeArray] = useState<string[]>([]);
   const [vendorArray, setVendorArray] = useState<string[]>([]);
   const [updateProduct] = useUpdateProductMutation();
@@ -246,7 +252,13 @@ const AddProduct = (props: any) => {
                 )}
               />
             </Box>
-            <Button variant="contained" fullWidth size="large" type="submit">
+            <Button
+              variant="contained"
+              fullWidth
+              size="large"
+              type="submit"
+              disabled={isSubmitting ? true : false}
+            >
               {productData ? "Update Product" : "Add Product"}
             </Button>
           </form>

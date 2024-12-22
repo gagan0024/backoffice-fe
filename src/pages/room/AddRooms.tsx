@@ -26,7 +26,13 @@ interface FormValues {
 const AddRooms = (props: any) => {
   const { setOpen, RoomData } = props;
   const methods = useForm<FormValues>();
-  const { reset, handleSubmit, setValue, watch } = methods;
+  const {
+    reset,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { isSubmitting },
+  } = methods;
   const { data: buildingList } = useGetBuildingListQuery({});
   const [addRooms] = useAddRoomsMutation();
   const [updateRooms] = useUpdateRoomsMutation();
@@ -242,7 +248,13 @@ const AddRooms = (props: any) => {
 
             {/* Submit Button */}
             <Box>
-              <Button type="submit" size="large" variant="contained" fullWidth>
+              <Button
+                type="submit"
+                size="large"
+                variant="contained"
+                fullWidth
+                disabled={isSubmitting ? true : false}
+              >
                 {RoomData?.id ? "Update Room" : "Add Room"}
               </Button>
             </Box>
