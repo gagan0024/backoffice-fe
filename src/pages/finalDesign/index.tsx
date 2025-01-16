@@ -1,19 +1,226 @@
-import { Box, Button, Divider, FormControl } from "@mui/material";
+import { Box, Button, FormControl } from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
 import RHFAutocomplete from "../../components/RHF/RHFAutocomplete";
-import RHFTextField from "../../components/RHF/RHFTextField";
 import { useState } from "react";
+import {
+  useAddFinalDesignsMutation,
+  useGetActionsListByIDQuery,
+  useGetBuildingListQuery,
+  useGetLocationListQuery,
+  useGetServiceListQuery,
+  useGetSubServiceListByIDQuery,
+  useLazyGetLevelsListQuery,
+  useLazyGetRoomsListQuery,
+  useLazyGetSubBuildingListQuery,
+} from "../../redux/api/api";
+
+import VentilationElevated from "./ventilation/VentilationElevated";
+import VentilationDepot from "./ventilation/VentilationDepot";
+import VentilationUnderground from "./ventilation/VentilationUnderground";
+import DailuxElevated from "./dailux/DailuxElevatedStation";
+import DailuxUnderground from "./dailux/DailuxUndergroundStation";
+import DailuxDepot from "./dailux/DailuxDepotStation";
+import { toast } from "react-toastify";
+import CableElevated from "./cableSizing/CableElevated";
+import CableUnderground from "./cableSizing/CableUnderground";
+import CableDepot from "./cableSizing/CableDepot";
+import HeatLoadElevated from "./heatLoad/HeatLoadElevated";
+import HeatLoadUnderground from "./heatLoad/HeatLoadUnderground";
+import HeatLoadDepot from "./heatLoad/HeatLoadDepot";
+import ElectricalPanelElevated from "./equipmentLoad/ElectricalPanelElevated";
+import ElectricalPanelUnderground from "./equipmentLoad/ElectricalPanelUnderground";
+import ElectricalPanelDepot from "./equipmentLoad/ElectricalPanelDepot";
 
 const FinalDesign = () => {
   const methods = useForm();
-  const [showfullForm, setShowFullForm] = useState<boolean>(false);
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
+  const {
+    watch,
+    setValue,
+    formState: { isSubmitting },
+    reset,
+  } = methods;
+  const methods_2 = useForm();
+  const {
+    watch: form_2,
+    formState: { isSubmitting: isSubmitting_2 },
+    reset: resetForm_2,
+  } = methods_2;
+  const { data: serviceList } = useGetServiceListQuery({});
+  const selectedService = watch("service");
+  const newSelectedService = selectedService?.value;
+  const { data: subServiceListByID } = useGetSubServiceListByIDQuery(
+    { service_id: newSelectedService },
+    { skip: !newSelectedService }
+  );
+
+  const selectedSubService = watch("sub_service");
+  const subServiceID = selectedSubService?.value;
+  const actionsById = useGetActionsListByIDQuery(
+    { sub_service_id: subServiceID },
+    { skip: !subServiceID }
+  );
+
+  const { data: locationListData } = useGetLocationListQuery({});
+  const { data: buildingList } = useGetBuildingListQuery({});
+  const [fetchSubBuildings, { data: subBuildingListData }] =
+    useLazyGetSubBuildingListQuery();
+  const [fetchLevels, { data: levelsListData }] = useLazyGetLevelsListQuery();
+  const [fetchRooms, { data: roomListData }] = useLazyGetRoomsListQuery();
+  const [selectedBuilding, setSelectedBuilding] = useState<any>(null);
+  const [selectedSubBuilding, setSelectedSubBuilding] = useState<any>(null);
+  const [selectedLevel, setSelectedLevel] = useState<any>(null);
+  const [selectedRoom, setSelectedRoom] = useState<any>(null);
+  const [form2Payload, setForm2Payload] = useState<any>(null);
+  const [showSecondForm, setShowSecondForm] = useState(false);
+  const [addFinalDesigns] = useAddFinalDesignsMutation();
+
+  const [renderComp, setRenderComp] = useState({
+    loaction: false,
+    building: false,
+    sub_building: false,
+    level: false,
+    room: false,
+  });
+
+  const handleRenderCopm = (value: string) => {
+    if (value === "BUILDING") {
+      setRenderComp({
+        loaction: true,
+        building: true,
+        sub_building: false,
+        level: false,
+        room: false,
+      });
+    } else if (value === "SUB_BUILDING") {
+      setRenderComp({
+        loaction: true,
+        building: true,
+        sub_building: true,
+        level: false,
+        room: false,
+      });
+    } else if (value === "LEVEL") {
+      setRenderComp({
+        loaction: true,
+        building: true,
+        sub_building: true,
+        level: true,
+        room: false,
+      });
+    } else if (value === "ROOM") {
+      setRenderComp({
+        loaction: true,
+        building: true,
+        sub_building: true,
+        level: true,
+        room: true,
+      });
+    }
   };
 
-  const handleChangeRoomValues = (value: any) => {
-    console.log(value, "hello");
-    setShowFullForm(true);
+  const serviceOptions = Array.isArray(serviceList?.data)
+    ? serviceList?.data.map((item: any) => ({
+        label: item.name || "Unknown",
+        value: item.id,
+      }))
+    : [];
+
+  const subServiceOptions = Array.isArray(subServiceListByID?.data)
+    ? subServiceListByID?.data.map((item: any) => ({
+        label: item.name || "Unknown",
+        value: item.id,
+      }))
+    : [];
+
+  const actionByIdList = Array.isArray(actionsById?.data?.data)
+    ? actionsById.data?.data.map((item: any) => {
+        return {
+          label: item.name || "Unknown",
+          value: item.id,
+          calculation_type: item.calculation_type,
+        };
+      })
+    : [];
+
+  const locationOptions = Array.isArray(locationListData?.data)
+    ? locationListData?.data.map((item: any) => ({
+        label: item.name || "Unknown",
+        value: item.id,
+      }))
+    : [];
+
+  // Options for dropdowns
+  const buildingOptions = Array.isArray(buildingList?.data)
+    ? buildingList?.data?.map((item: any) => ({
+        label: item.type || "Unknown",
+        value: item.id,
+      }))
+    : [];
+
+  const subBuildingOptions = Array.isArray(subBuildingListData?.data)
+    ? subBuildingListData?.data
+        ?.filter((item: any) => item.building_id === selectedBuilding?.value)
+        .map((item: any) => ({
+          label: item.type || "Unknown",
+          value: item.id,
+        }))
+    : [];
+
+  const levelsOptions =
+    levelsListData?.data
+      ?.filter(
+        (item: any) => item.sub_building_id === selectedSubBuilding?.value
+      )
+      .map((item: any) => ({
+        label: item.name || "Unknown",
+        value: item.id,
+      })) || [];
+
+  const roomOptions =
+    roomListData?.data
+      ?.filter((item: any) => item.level_id === selectedLevel?.value)
+      .map((item: any) => ({
+        label: item.name || "Unknown",
+        value: item.id,
+      })) || [];
+
+  const action = watch("action");
+  const subServiceCheck = watch("sub_service");
+  const buildingCheck = watch("building");
+
+  const onSubmitForm1 = (data: any) => {
+    setForm2Payload(data);
+    setShowSecondForm(true);
+  };
+
+  const onSubmitForm2 = async (data: any) => {
+    const payload = {
+      url: "final-designs",
+      body: {
+        service_id: form2Payload?.service?.value,
+        sub_service_id: form2Payload?.sub_service?.value,
+        action_id: form2Payload?.action?.value,
+        location_id: form2Payload?.location?.value,
+        building_id: form2Payload?.building?.value,
+        ...(selectedSubBuilding?.value && {
+          sub_building_id: selectedSubBuilding?.value,
+        }),
+        ...(selectedLevel?.value && { level_id: selectedLevel?.value }),
+        ...(selectedRoom?.value && { room_id: selectedRoom?.value }),
+        calculation_type: form2Payload?.action?.calculation_type,
+        action_data: data,
+      },
+    };
+    try {
+      const resp: any = await addFinalDesigns(payload).unwrap();
+      if (resp.status === 3031) {
+        toast.success(resp.message);
+      }
+      reset();
+      resetForm_2();
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
 
   return (
@@ -21,254 +228,266 @@ const FinalDesign = () => {
       <Box className="mb-4">
         <h2 className="text-2xl font-bold">Final Design Form</h2>
       </Box>
-      <FormProvider {...methods}>
-        <form
-          className="h-[70vh] overflow-y-scroll py-2"
-          onSubmit={methods.handleSubmit(onSubmit)}
-        >
-          <Box className="flex gap-4 mb-4 flex-wrap">
-            <FormControl className="w-1/4">
-              <RHFAutocomplete
-                name="location"
-                options={["Option 1", "Option 2", "Option 3"]}
-                label="Location"
-                rules={{ required: "This field is required" }}
-              />
-            </FormControl>
 
-            <FormControl className="w-1/4">
-              <RHFAutocomplete
-                name="building"
-                options={["Option 1", "Option 2", "Option 3"]}
-                label="Building"
-                rules={{ required: "This field is required" }}
-              />
-            </FormControl>
+      <Box className="h-[70vh] overflow-y-scroll py-4">
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmitForm1)}>
+            <Box className="flex gap-4 mb-4 flex-wrap">
+              <FormControl className="w-1/4">
+                <RHFAutocomplete
+                  name="service"
+                  options={serviceOptions}
+                  getOptionLabel={(option) => option?.label || ""}
+                  isOptionEqualToValue={(option: any, value: any) =>
+                    option?.value === value?.value
+                  }
+                  label="Service"
+                  rules={{ required: "This field is required" }}
+                />
+              </FormControl>
 
-            <FormControl className="w-1/4">
-              <RHFAutocomplete
-                name="sub_building"
-                options={["Option 1", "Option 2", "Option 3"]}
-                label="Sub Building"
-                rules={{ required: "This field is required" }}
-              />
-            </FormControl>
+              <FormControl className="w-1/4">
+                <RHFAutocomplete
+                  name="sub_service"
+                  options={subServiceOptions}
+                  getOptionLabel={(option) => option?.label || ""}
+                  isOptionEqualToValue={(option: any, value: any) =>
+                    option?.value === value?.value
+                  }
+                  label="Sub Service"
+                  rules={{ required: "This field is required" }}
+                />
+              </FormControl>
 
-            <FormControl className="w-1/4">
-              <RHFAutocomplete
-                name="levels"
-                options={["Option 1", "Option 2", "Option 3"]}
-                label="levels"
-                rules={{ required: "This field is required" }}
-              />
-            </FormControl>
+              <FormControl className="w-1/4">
+                <RHFAutocomplete
+                  name="action"
+                  options={actionByIdList}
+                  getOptionLabel={(option) => option?.label || ""}
+                  isOptionEqualToValue={(option: any, value: any) =>
+                    option?.value === value?.value
+                  }
+                  label="Action"
+                  rules={{ required: "This field is required" }}
+                  onChange={(event: any, value: any) => {
+                    handleRenderCopm(value?.calculation_type);
+                    setValue("action", value);
+                  }}
+                />
+              </FormControl>
+            </Box>
 
-            <FormControl className="w-1/4">
-              <RHFAutocomplete
-                name="rooms"
-                options={["Option 1", "Option 2", "Option 3"]}
-                label="Rooms"
-                rules={{ required: "This field is required" }}
-                onChange={(value: any) => handleChangeRoomValues(value)}
-              />
-            </FormControl>
-          </Box>
-          {showfullForm ? (
-            <>
-              <Box className="flex flex-col gap-4">
-                <h2 className="text-xl font-bold">VRV SYSTEM</h2>
-                <Box className="flex flex-col gap-4">
-                  <Box>
-                    <h2 className="mb-2">Outside Temprature</h2>
-                    <Divider />
-                  </Box>
-                  <Box className="flex gap-4 mb-4">
-                    <RHFTextField
-                      name="summer"
-                      label="Summer"
-                      type="number"
-                      rules={{
-                        required: "This field is required",
-                        max: {
-                          value: 9999999,
-                          message: "You can enter 7 digit maxium ",
-                        },
+            {action && (
+              <Box className="flex gap-4 mb-4 flex-wrap">
+                {renderComp.loaction && (
+                  <FormControl className="w-1/4">
+                    <RHFAutocomplete
+                      name="location"
+                      options={locationOptions}
+                      getOptionLabel={(option) => option?.label || ""}
+                      isOptionEqualToValue={(option: any, value: any) =>
+                        option?.value === value?.value
+                      }
+                      label="Location"
+                      rules={{ required: "This field is required" }}
+                    />
+                  </FormControl>
+                )}
+
+                {renderComp.building && (
+                  <FormControl className="w-1/4">
+                    <RHFAutocomplete
+                      name="building"
+                      value={selectedBuilding || null}
+                      options={buildingOptions}
+                      getOptionLabel={(option) => option?.label || ""}
+                      isOptionEqualToValue={(option: any, value: any) =>
+                        option?.value === value?.value
+                      }
+                      label="Building"
+                      rules={{ required: "This field is required" }}
+                      onChange={(event: any, value: any) => {
+                        setSelectedBuilding(value || null);
+                        setSelectedSubBuilding(null);
+                        setSelectedLevel(null);
+                        setSelectedRoom(null);
+                        if (value?.value) {
+                          fetchSubBuildings({ building_id: value.value });
+                        }
+                        setValue("building", value);
                       }}
                     />
-                    <RHFTextField
-                      name="monsoon"
-                      label="Monsoon"
-                      rules={{
-                        required: "This field is required",
-                        max: {
-                          value: 9999999,
-                          message: "You can enter 7 digit maxium ",
-                        },
-                      }}
-                      type="number"
-                    />
-                    <RHFTextField
-                      name="winter"
-                      label="Winter"
-                      rules={{
-                        required: "This field is required",
-                        max: {
-                          value: 9999999,
-                          message: "You can enter 7 digit maxium ",
-                        },
-                      }}
-                      type="number"
-                    />
-                  </Box>
-                </Box>
+                  </FormControl>
+                )}
 
-                {[
-                  "Inside Temprature",
-                  "Equipment Heat Disipetion",
-                  "Occupancy",
-                  "Light Load",
-                  "Area",
-                  "Height",
-                  "Sensible Heat",
-                  "Type of Glass/U-Factor",
-                  "Wall",
-                  "Partition/U-Factor",
-                ].map((title: string, index: number) => (
-                  <Box className="flex flex-col gap-4" key={index}>
-                    <Box>
-                      <h2 className="mb-2">{title}</h2>
-                      <Divider />
-                    </Box>
-                    <Box className="grid grid-rows-2 gap-4 mb-4 grid-flow-col">
-                      <RHFTextField
-                        name={`${title}.isignal-equipment-room`}
-                        label="Signal Equipment Room"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
+                {renderComp.sub_building && (
+                  <FormControl className="w-1/4">
+                    <RHFAutocomplete
+                      name="sub_building"
+                      value={selectedSubBuilding || null}
+                      options={subBuildingOptions}
+                      getOptionLabel={(option) => option?.label || ""}
+                      isOptionEqualToValue={(option: any, value: any) =>
+                        option?.value === value?.value
+                      }
+                      label="Sub Building"
+                      rules={{ required: "This field is required" }}
+                      onChange={(event: any, value: any) => {
+                        setSelectedSubBuilding(value || null);
+                        setSelectedLevel(null);
+                        setSelectedRoom(null);
+                        if (value?.value) {
+                          fetchLevels({ sub_building_id: value.value });
                         }
-                      />
-                      <RHFTextField
-                        name={`${title}.telecom-equipment-room`}
-                        label="Telecom Equipment Room"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
-                        }
-                      />
+                        setValue("sub_building", value);
+                      }}
+                    />
+                  </FormControl>
+                )}
 
-                      <RHFTextField
-                        name={`${title}.UPS-S&T`}
-                        label="UPS S&T"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
+                {renderComp.level && (
+                  <FormControl className="w-1/4">
+                    <RHFAutocomplete
+                      name="levels"
+                      value={selectedLevel || null}
+                      options={levelsOptions}
+                      getOptionLabel={(option) => option?.label || ""}
+                      isOptionEqualToValue={(option: any, value: any) =>
+                        option?.value === value?.value
+                      }
+                      label="Levels"
+                      rules={{ required: "This field is required" }}
+                      onChange={(event: any, value: any) => {
+                        setSelectedLevel(value || null);
+                        setSelectedRoom(null);
+                        if (value?.value) {
+                          fetchRooms({ level_id: value.value });
                         }
-                      />
-                      <RHFTextField
-                        name={`${title}.UPS-electrical`}
-                        label="UPS Electrical"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
-                        }
-                      />
-                      <RHFTextField
-                        name={`${title}.station-control-room`}
-                        label="Station Control Room"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
-                        }
-                      />
-                      <RHFTextField
-                        name={`${title}.ticket-office-manager`}
-                        label="Ticket Office Manager"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
-                        }
-                      />
-                      <RHFTextField
-                        name={`${title}.EFO`}
-                        label="EFO"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
-                        }
-                      />
-                    </Box>
-                  </Box>
-                ))}
+                        setValue("levels", value);
+                      }}
+                    />
+                  </FormControl>
+                )}
+
+                {renderComp.room && (
+                  <FormControl className="w-1/4">
+                    <RHFAutocomplete
+                      name="rooms"
+                      value={selectedRoom || null}
+                      options={roomOptions}
+                      getOptionLabel={(option) => option?.label || ""}
+                      isOptionEqualToValue={(option: any, value: any) =>
+                        option?.value === value?.value
+                      }
+                      label="Rooms"
+                      rules={{ required: "This field is required" }}
+                      onChange={(event: any, value: any) => {
+                        setSelectedRoom(value || null);
+                        setValue("rooms", value);
+                      }}
+                    />
+                  </FormControl>
+                )}
               </Box>
+            )}
 
-              <Box>
-                <h2 className="text-xl font-bold mb-4">VENTILATION</h2>
-                {[
-                  "Ventilation Area",
-                  "Ventilation Height",
-                  "Air Changes per Hour",
-                  "Number of Fans",
-                ].map((title: string, index: number) => (
-                  <Box className="flex flex-col gap-4" key={index}>
-                    <Box>
-                      <h2 className="mb-2">{title}</h2>
-                      <Divider />
-                    </Box>
-                    <Box className="grid grid-rows-1 gap-4 mb-4 grid-flow-col">
-                      <RHFTextField
-                        name={`${title}.ass`}
-                        label="Ass"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
-                        }
-                      />
-                      <RHFTextField
-                        name={`${title}.toilet`}
-                        label="Toilet"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
-                        }
-                      />
-                      <RHFTextField
-                        name={`${title}.pump-room`}
-                        label="Pump Room"
-                        rules={
-                          {
-                            required: "This field is required",
-                          }
-                        }
-                      />
-                    </Box>
-                  </Box>
-                ))}
-              </Box>
-            </>
-          ) : null}
-
-          <Box className="flex justify-start py-4">
-            <Button
-              type="submit"
-              variant="contained"
-              size="large"
-              className="w-[20.5rem] h-12"
+            <Box className="flex justify-start py-4">
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                className="w-[20.5rem] h-12"
+                disabled={isSubmitting ? true : false}
+              >
+                Next
+              </Button>
+            </Box>
+          </form>
+        </FormProvider>
+        {showSecondForm && (
+          <FormProvider {...methods_2}>
+            <form
+              className="py-2"
+              onSubmit={methods_2.handleSubmit(onSubmitForm2)}
             >
-              Submit
-            </Button>
-          </Box>
-        </form>
-      </FormProvider>
+              <Box className="mb-4 my-4">
+                {subServiceCheck?.label === "Lighting" && (
+                  <>
+                    {buildingCheck?.label === "Elevated Metro Station" && (
+                      <DailuxElevated />
+                    )}
+                    {buildingCheck?.label === "Underground Metro Station" && (
+                      <DailuxUnderground />
+                    )}
+                    {buildingCheck?.label === "Depot" && <DailuxDepot />}
+                  </>
+                )}
+                {subServiceCheck?.label === "Ventilation" && (
+                  <>
+                    {buildingCheck?.label === "Elevated Metro Station" && (
+                      <VentilationElevated />
+                    )}
+                    {buildingCheck?.label === "Underground Metro Station" && (
+                      <VentilationUnderground />
+                    )}
+                    {buildingCheck?.label === "Depot" && <VentilationDepot />}
+                  </>
+                )}
+
+                {subServiceCheck?.label === "Containment" && (
+                  <>
+                    {buildingCheck?.label === "Elevated Metro Station" && (
+                      <CableElevated />
+                    )}
+                    {buildingCheck?.label === "Underground Metro Station" && (
+                      <CableUnderground />
+                    )}
+                    {buildingCheck?.label === "Depot" && <CableDepot />}
+                  </>
+                )}
+
+                {subServiceCheck?.label === "Chilled Water System" && (
+                  <>
+                    {buildingCheck?.label === "Elevated Metro Station" && (
+                      <HeatLoadElevated />
+                    )}
+                    {buildingCheck?.label === "Underground Metro Station" && (
+                      <HeatLoadUnderground />
+                    )}
+                    {buildingCheck?.label === "Depot" && <HeatLoadDepot />}
+                  </>
+                )}
+
+                {subServiceCheck?.label === "Chilled Water System" && (
+                  <>
+                    {buildingCheck?.label === "Elevated Metro Station" && (
+                      <ElectricalPanelElevated />
+                    )}
+                    {buildingCheck?.label === "Underground Metro Station" && (
+                      <ElectricalPanelUnderground />
+                    )}
+                    {buildingCheck?.label === "Depot" && (
+                      <ElectricalPanelDepot />
+                    )}
+                  </>
+                )}
+              </Box>
+
+              <Box className="flex justify-start py-4">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  className="w-[20.5rem] h-12"
+                  disabled={isSubmitting_2 ? true : false}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </form>
+          </FormProvider>
+        )}
+      </Box>
     </>
   );
 };

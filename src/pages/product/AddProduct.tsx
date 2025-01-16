@@ -26,6 +26,7 @@ interface FormValues {
   vendors: any;
   sub_service_id: any;
   service: any;
+  factors: any;
 }
 
 const AddProduct = (props: any) => {
@@ -40,6 +41,7 @@ const AddProduct = (props: any) => {
   } = methods;
   const [productTypeArray, setProductTypeArray] = useState<string[]>([]);
   const [vendorArray, setVendorArray] = useState<string[]>([]);
+  const [factorsArray, setFactorsArray] = useState<string[]>([]);
   const [updateProduct] = useUpdateProductMutation();
   const [addProduct] = useAddProductMutation();
   const { data: serviceList } = useGetServiceListQuery({});
@@ -63,12 +65,17 @@ const AddProduct = (props: any) => {
     console.log(event);
   };
 
+  const handleFactorsChange = (event: any, newValue: string[]) => {
+    setFactorsArray(newValue);
+    setValue("factors", newValue);
+    console.log(event);
+  };
+
   const handleCloseModalForAddLocation = () => {
     setOpen(false);
   };
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data, "datadatadata");
     const reqObject = {
       url: productData?.id ? `products/${productData.id}` : "products",
       body: {
@@ -77,10 +84,9 @@ const AddProduct = (props: any) => {
         type: productTypeArray,
         vendors: vendorArray,
         sub_service_id: newSelectedService,
+        factors: factorsArray,
       },
     };
-
-    console.log(reqObject, "reqObjectreqObject");
     try {
       if (productData?.id) {
         const resp: any = await updateProduct(reqObject).unwrap();
@@ -243,6 +249,42 @@ const AddProduct = (props: any) => {
                         {...params}
                         name="vendors"
                         label="Vendor"
+                        rules={{
+                          required: "This field is required",
+                        }}
+                      />
+                    )}
+                  />
+                )}
+              />
+            </Box>
+
+            <Box>
+              <Controller
+                name="factors"
+                control={control}
+                render={({ field }) => (
+                  <Autocomplete
+                    {...field}
+                    multiple
+                    options={[]}
+                    value={factorsArray}
+                    onChange={handleFactorsChange}
+                    freeSolo
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip
+                          variant="outlined"
+                          label={option}
+                          {...getTagProps({ index })}
+                        />
+                      ))
+                    }
+                    renderInput={(params) => (
+                      <RHFTextField
+                        {...params}
+                        name="factors"
+                        label="Factors"
                         rules={{
                           required: "This field is required",
                         }}

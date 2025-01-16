@@ -14,6 +14,8 @@ export const api = createApi({
     "Rooms",
     "Service",
     "SubService",
+    "Action",
+    "finalDesigns"
   ],
 
   endpoints: (builder) => ({
@@ -321,6 +323,58 @@ export const api = createApi({
       }),
       invalidatesTags: ["SubService"],
     }),
+
+    addAction: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["Action"],
+    }),
+
+    updateAction: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "PATCH",
+        body: data.body,
+      }),
+      invalidatesTags: ["Action"],
+    }),
+
+    getActionsList: builder.query<any, any>({
+      query: () => ({
+        url: `${apiRoot}actions`,
+        method: "GET",
+      }),
+      providesTags: ["Action"],
+    }),
+
+    deleteActions: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Action"],
+    }),
+
+    getActionsListByID: builder.query<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}actions?sub_service_id=${data.sub_service_id}`,
+        method: "GET",
+      }),
+      providesTags: ["Action"],
+    }),
+
+    addFinalDesigns: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["finalDesigns"],
+    }),
+
   }),
 });
 
@@ -361,4 +415,13 @@ export const {
   useUpdateServiceMutation,
   useUpdateSubServiceMutation,
   useGetSubServiceListByIDQuery,
+  useAddActionMutation,
+  useUpdateActionMutation,
+  useDeleteActionsMutation,
+  useGetActionsListQuery,
+  useGetActionsListByIDQuery,
+  useLazyGetSubBuildingListQuery,
+  useLazyGetLevelsListQuery,
+  useLazyGetRoomsListQuery,
+  useAddFinalDesignsMutation
 } = api;

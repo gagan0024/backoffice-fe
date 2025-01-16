@@ -17,7 +17,6 @@ const Layout = () => {
             </Suspense>
           </Box>
         </Box>
-
       </Box>
     </>
   );

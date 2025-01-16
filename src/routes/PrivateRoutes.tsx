@@ -10,6 +10,7 @@ import Rooms from "../pages/room";
 import FinalDesign from "../pages/finalDesign";
 import Service from "../pages/Services";
 import SubService from "../pages/SubService";
+import Actions from "../pages/actions";
 
 const PrivateRoutes = () => {
   const allPrivateRoutes = useRoutes([
@@ -56,6 +57,10 @@ const PrivateRoutes = () => {
         {
           path: "sub-services",
           element: <SubService />,
+        },
+        {
+          path: "actions",
+          element: <Actions />,
         },
         {
           path: "final-design-form",

@@ -16,10 +16,11 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import DynamicFormIcon from "@mui/icons-material/DynamicForm";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 
 const SideBar = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current route
+  const location = useLocation();
   const [selectedItem, setSelectedItem] = useState<string>("");
 
   // Define the menu items with icons and routes
@@ -37,6 +38,7 @@ const SideBar = () => {
       route: "/sub-services",
     },
     { name: "Products", icon: <InventoryIcon />, route: "/product" },
+    { name: "Actions", icon: <DirectionsRunIcon />, route: "/actions" },
     {
       name: "Final Design Form",
       icon: <DynamicFormIcon />,
@@ -61,6 +63,7 @@ const SideBar = () => {
         height: "100vh",
         backgroundColor: "black",
         color: "white",
+        overflowY: "auto",
       }}
       style={{ height: "calc(100vh - 65px)" }}
     >
