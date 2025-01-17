@@ -57,7 +57,8 @@ const DailuxElevated = () => {
                 key={`${section}.${name}`}
                 name={`${section.replace(/\s+/g, "_").toLowerCase()}.${name}`}
                 label={label}
-                // rules={{ required: "This field is required" }}
+                rules={{ required: "This field is required" }}
+                type="number"
               />
             ))}
           </Box>

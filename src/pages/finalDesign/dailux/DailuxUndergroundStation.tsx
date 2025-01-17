@@ -35,40 +35,37 @@ const DailuxUnderground = () => {
     { name: "Platform_Area", label: "Platform Area" },
   ];
 
+  const sections = [
+    "Lux Level",
+    "Uniformity",
+    "Area",
+    "Light Fixture",
+    "Mounting Height",
+    "Maintenance factor",
+    "Reflectance factor",
+    "Wall zone",
+    "Work plane",
+  ];
+
   return (
     <>
-      <h2 className="text-xl font-bold mb-4">Dailux (Underground Station)</h2>
-      {[
-        "Lux Level",
-        "Uniformity",
-        "Area",
-        "Light Fixture",
-        "Mounting Height",
-        "Maintenance factor",
-        "Reflectance factor",
-        "Wall zone",
-        "Work plane	",
-      ].map((title: string, index: number) => (
+      <h2 className="text-xl font-bold mb-4">Dailux (Underground)</h2>
+      {sections.map((section, index) => (
         <Box className="flex flex-col gap-4" key={index}>
           <Box>
-            <h2 className="mb-2">{title}</h2>
+            <h2 className="mb-2">{section}</h2>
             <Divider />
           </Box>
           <Box className="grid grid-rows-5 gap-4 mb-4 grid-flow-col">
-            {rooms.map((room: any, index: number) => {
-              return (
-                <>
-                  <RHFTextField
-                    key={index}
-                    name={`${title}.${room.name}`}
-                    label={room.label}
-                    rules={{
-                      required: "This field is required",
-                    }}
-                  />
-                </>
-              );
-            })}
+            {rooms.map(({ name, label }) => (
+              <RHFTextField
+                key={`${section}.${name}`}
+                name={`${section.replace(/\s+/g, "_").toLowerCase()}.${name}`}
+                label={label}
+                rules={{ required: "This field is required" }}
+                type="number"
+              />
+            ))}
           </Box>
         </Box>
       ))}

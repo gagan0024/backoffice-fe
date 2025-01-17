@@ -35,19 +35,20 @@ const ElectricalPanelElevated = () => {
   return (
     <>
       <h2 className="text-xl font-bold mb-4">ELECTRICAL PANEL (Elevated)</h2>
-      {panelDetails.map((panel, index) => (
+      {panelDetails.map((section, index) => (
         <Box className="flex flex-col gap-4" key={index}>
           <Box>
-            <h2 className="mb-2">{panel}</h2>
+            <h2 className="mb-2">{section}</h2>
             <Divider />
           </Box>
           <Box className="grid grid-rows-3 gap-4 mb-4 grid-flow-col">
             {fieldDetails.map(({ name, label }) => (
               <RHFTextField
-                key={`${panel}.${name}`}
-                name={`${panel}.${name}`}
+                key={`${section}.${name}`}
+                name={`${section.replace(/\s+/g, "_").toLowerCase()}.${name}`}
                 label={label}
-                // rules={{ required: "This field is required" }}
+                rules={{ required: "This field is required" }}
+                type="number"
               />
             ))}
           </Box>
