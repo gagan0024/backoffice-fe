@@ -33,14 +33,14 @@ const ElectricalPanelDepot = () => {
 
   return (
     <>
-      <h2 className="text-xl font-bold mb-4">ELECTRICAL PANEL (Depot)</h2>
+      <h2 className="text-xl font-bold mb-4">Equipment Load (Depot)</h2>
       {panelTitles.map((section, index) => (
         <Box className="flex flex-col gap-4" key={index}>
           <Box>
             <h2 className="mb-2">{section}</h2>
             <Divider />
           </Box>
-          <Box className="grid grid-rows-3 gap-4 mb-4 grid-flow-col">
+          <Box className="grid grid-cols-4 gap-4 mb-4">
             {fields.map(({ name, label }) => (
               <RHFTextField
                 key={`${section}.${name}`}

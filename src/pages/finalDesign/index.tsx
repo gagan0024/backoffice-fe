@@ -404,6 +404,7 @@ const FinalDesign = () => {
             </Box>
           </form>
         </FormProvider>
+
         {showSecondForm && (
           <FormProvider {...methods_2}>
             <form
@@ -448,26 +449,32 @@ const FinalDesign = () => {
 
                 {subServiceCheck?.label === "Chilled Water System" && (
                   <>
-                    {buildingCheck?.label === "Elevated Metro Station" && (
-                      <HeatLoadElevated />
+                    {action.label === "heat load" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <HeatLoadElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <HeatLoadUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && <HeatLoadDepot />}
+                      </>
                     )}
-                    {buildingCheck?.label === "Underground Metro Station" && (
-                      <HeatLoadUnderground />
-                    )}
-                    {buildingCheck?.label === "Depot" && <HeatLoadDepot />}
-                  </>
-                )}
 
-                {subServiceCheck?.label === "Chilled Water System" && (
-                  <>
-                    {buildingCheck?.label === "Elevated Metro Station" && (
-                      <ElectricalPanelElevated />
-                    )}
-                    {buildingCheck?.label === "Underground Metro Station" && (
-                      <ElectricalPanelUnderground />
-                    )}
-                    {buildingCheck?.label === "Depot" && (
-                      <ElectricalPanelDepot />
+                    {action.label === "Equipment Load" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <ElectricalPanelElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <ElectricalPanelUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && (
+                          <ElectricalPanelDepot />
+                        )}
+                      </>
                     )}
                   </>
                 )}

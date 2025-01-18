@@ -30,7 +30,7 @@ const DuctSizingDepot = () => {
             <h2 className="mb-2">{panel}</h2>
             <Divider />
           </Box>
-          <Box className="grid grid-rows-3 gap-4 mb-4 grid-flow-col">
+          <Box className="grid grid-cols-4 gap-4 mb-4">
             {fieldDetails.map((fieldDetails: any, index: number) => {
               return (
                 <>

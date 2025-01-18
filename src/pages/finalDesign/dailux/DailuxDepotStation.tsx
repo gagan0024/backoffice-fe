@@ -103,7 +103,7 @@ const DailuxDepot = () => {
             <h2 className="mb-2">{section}</h2>
             <Divider />
           </Box>
-          <Box className="grid grid-rows-12 gap-4 mb-4 grid-flow-col">
+          <Box className="grid grid-cols-4 gap-4 mb-4">
             {rooms.map(({ name, label }) => (
               <RHFTextField
                 key={`${section}.${name}`}
