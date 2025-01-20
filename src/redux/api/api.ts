@@ -15,7 +15,8 @@ export const api = createApi({
     "Service",
     "SubService",
     "Action",
-    "finalDesigns"
+    "FinalDesigns",
+    "Category",
   ],
 
   endpoints: (builder) => ({
@@ -372,9 +373,16 @@ export const api = createApi({
         method: "POST",
         body: data.body,
       }),
-      invalidatesTags: ["finalDesigns"],
+      invalidatesTags: ["FinalDesigns"],
     }),
 
+    getCategoryList: builder.query<any, any>({
+      query: () => ({
+        url: `${apiRoot}products/categories`,
+        method: "GET",
+      }),
+      providesTags: ["Category"],
+    }),
   }),
 });
 
@@ -423,5 +431,6 @@ export const {
   useLazyGetSubBuildingListQuery,
   useLazyGetLevelsListQuery,
   useLazyGetRoomsListQuery,
-  useAddFinalDesignsMutation
+  useAddFinalDesignsMutation,
+  useGetCategoryListQuery,
 } = api;

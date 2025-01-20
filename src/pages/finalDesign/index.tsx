@@ -82,7 +82,7 @@ const FinalDesign = () => {
     room: false,
   });
 
-  const handleRenderCopm = (value: string) => {
+  const handleRenderCopm = (value: any) => {
     if (value === "BUILDING") {
       setRenderComp({
         loaction: true,
@@ -149,7 +149,6 @@ const FinalDesign = () => {
       }))
     : [];
 
-  // Options for dropdowns
   const buildingOptions = Array.isArray(buildingList?.data)
     ? buildingList?.data?.map((item: any) => ({
         label: item.type || "Unknown",
@@ -243,6 +242,12 @@ const FinalDesign = () => {
                   }
                   label="Service"
                   rules={{ required: "This field is required" }}
+                  onInputChange={(event: any, value: any) => {
+                    setValue("service", value);
+                    setValue("sub_service", null);
+                    setValue("action", null);
+                    setSelectedBuilding(null);
+                  }}
                 />
               </FormControl>
 
@@ -256,6 +261,13 @@ const FinalDesign = () => {
                   }
                   label="Sub Service"
                   rules={{ required: "This field is required" }}
+                  onInputChange={(event: any, value: any) => {
+                    setValue("sub_service", value);
+                    setValue("action", null);
+                    handleRenderCopm(null);
+                    setValue("building", null);
+                    setSelectedBuilding(null);
+                  }}
                 />
               </FormControl>
 
@@ -272,6 +284,7 @@ const FinalDesign = () => {
                   onChange={(event: any, value: any) => {
                     handleRenderCopm(value?.calculation_type);
                     setValue("action", value);
+                    setValue("location", null);
                   }}
                 />
               </FormControl>
@@ -397,7 +410,12 @@ const FinalDesign = () => {
                 variant="contained"
                 size="large"
                 className="w-[20.5rem] h-12"
-                disabled={isSubmitting ? true : false}
+                disabled={
+                  action?.calculation_type !== "BUILDING" &&
+                  action?.calculation_type !== "SUB_BUILDING" &&
+                  action?.calculation_type !== "LEVEL" &&
+                  action?.calculation_type !== "ROOM"
+                }
               >
                 Next
               </Button>
@@ -449,7 +467,7 @@ const FinalDesign = () => {
 
                 {subServiceCheck?.label === "Chilled Water System" && (
                   <>
-                    {action.label === "heat load" && (
+                    {action?.label === "heat load" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <HeatLoadElevated />
@@ -462,7 +480,7 @@ const FinalDesign = () => {
                       </>
                     )}
 
-                    {action.label === "Equipment Load" && (
+                    {action?.label === "Equipment Load" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <ElectricalPanelElevated />

@@ -40,7 +40,7 @@ const Product = () => {
     setOpen(true);
   };
 
-  const handleEditLocation = (item: any) => {
+  const handleEditProduct = (item: any) => {
     setProductData(item);
     setOpen(true);
   };
@@ -113,7 +113,7 @@ const Product = () => {
                     <IconButton
                       aria-label="edit"
                       color="primary"
-                      onClick={() => handleEditLocation(item)}
+                      onClick={() => handleEditProduct(item)}
                     >
                       <EditNoteIcon />
                     </IconButton>
@@ -138,7 +138,11 @@ const Product = () => {
         setOpen={setOpen}
         closeDrawer={handleCloseModalForAddLocation}
       >
-        <AddProduct setOpen={setOpen} productData={productData} />
+        <AddProduct
+          setOpen={setOpen}
+          productData={productData}
+          setProductData={setProductData}
+        />
       </CustomDrawer>
 
       <CustomModal openModal={openDeleteModal}>

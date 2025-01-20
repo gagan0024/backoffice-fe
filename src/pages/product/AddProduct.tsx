@@ -10,11 +10,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import { FormProvider, useForm, Controller } from "react-hook-form";
 import RHFAutocomplete from "../../components/RHF/RHFAutocomplete";
 import RHFTextField from "../../components/RHF/RHFTextField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useAddProductMutation,
+  useGetCategoryListQuery,
   useGetServiceListQuery,
   useGetSubServiceListByIDQuery,
+  useGetSubServiceListQuery,
   useUpdateProductMutation,
 } from "../../redux/api/api";
 import { toast } from "react-toastify";
@@ -22,15 +24,17 @@ import { toast } from "react-toastify";
 interface FormValues {
   name: any;
   type: any;
-  capacity: string;
+  capacity: number;
   vendors: any;
-  sub_service_id: any;
+  sub_service: any;
   service: any;
   factors: any;
+  unit: number;
+  product_category: any;
 }
 
 const AddProduct = (props: any) => {
-  const { setOpen, productData } = props;
+  const { setOpen, productData, setProductData } = props;
   const methods = useForm<FormValues>();
   const {
     setValue,
@@ -39,52 +43,87 @@ const AddProduct = (props: any) => {
     reset,
     formState: { isSubmitting },
   } = methods;
-  const [productTypeArray, setProductTypeArray] = useState<string[]>([]);
-  const [vendorArray, setVendorArray] = useState<string[]>([]);
-  const [factorsArray, setFactorsArray] = useState<string[]>([]);
+  const [productTypeArray, setProductTypeArray] = useState<any[]>([]);
+  const [vendorArray, setVendorArray] = useState<any[]>([]);
+  const [categoryId, setCategoryId] = useState<any>("");
   const [updateProduct] = useUpdateProductMutation();
   const [addProduct] = useAddProductMutation();
   const { data: serviceList } = useGetServiceListQuery({});
+  const { data: subServiceListData } = useGetSubServiceListQuery({});
   const selectedService = watch("service");
   const newSelectedService = selectedService?.value;
-
   const { data: subServiceListByID } = useGetSubServiceListByIDQuery(
     { service_id: newSelectedService },
     { skip: !newSelectedService }
   );
 
-  const handleProductTypeChange = (event: any, newValue: string[]) => {
+  const selectedSubService = watch("sub_service");
+  const newSelectedSubService = selectedSubService?.value;
+
+  const { data: categoryData } = useGetCategoryListQuery({});
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+
+  const handleProductTypeChange = (event: any, newValue: any[]) => {
     setProductTypeArray(newValue);
     setValue("type", newValue);
-    console.log(event);
   };
 
-  const handleVendorChange = (event: any, newValue: string[]) => {
+  const handleVendorChange = (event: any, newValue: any[]) => {
     setVendorArray(newValue);
     setValue("vendors", newValue);
-    console.log(event);
   };
 
-  const handleFactorsChange = (event: any, newValue: string[]) => {
-    setFactorsArray(newValue);
-    setValue("factors", newValue);
-    console.log(event);
-  };
-
-  const handleCloseModalForAddLocation = () => {
+  const handleCloseModalForAddProduct = () => {
     setOpen(false);
+    setProductData(null);
+  };
+
+  const serviceOptions = (serviceList?.data || []).map((item: any) => ({
+    label: item.name || "Unknown",
+    value: item.id,
+  }));
+
+  const subServiceOptions = (subServiceListByID?.data || []).map(
+    (item: any) => ({
+      label: item.name || "Unknown",
+      value: item.id,
+    })
+  );
+
+  const categoryDataOptions = (categoryData?.data || []).map((item: any) => ({
+    label: item.name || "Unknown",
+    value: item.id,
+    factors: item.factors || [],
+  }));
+
+  const handleCategoryChange = (event: any, value: any) => {
+    setSelectedCategory(value);
+    setCategoryId(value?.value);
+    // @ts-ignore
+    setValue("product_category", value);
+  };
+
+  const handleData = (data: any) => {
+    const newArray: any = [];
+    const keys = Object.keys(data);
+    for (const item of keys) {
+      newArray.push({ [item]: data[item] });
+    }
+    return newArray;
   };
 
   const onSubmit = async (data: FormValues) => {
+    const array = handleData(data.factors);
     const reqObject = {
-      url: productData?.id ? `products/${productData.id}` : "products",
+      url: productData?.id ? `products/${productData?.id}` : "products",
       body: {
         name: data.name,
         capacity: data.capacity,
         type: productTypeArray,
         vendors: vendorArray,
-        sub_service_id: newSelectedService,
-        factors: factorsArray,
+        sub_service_id: newSelectedSubService,
+        category_id: categoryId,
+        factors: array,
       },
     };
     try {
@@ -106,26 +145,60 @@ const AddProduct = (props: any) => {
     }
   };
 
-  const serviceOptions = (serviceList?.data || []).map((item: any) => ({
-    label: item.name || "Unknown",
-    value: item.id,
-  }));
+  useEffect(() => {
+    if (productData) {
+      const subServiceSetValue = subServiceListData?.data.find(
+        (item: any) => item.id === productData.sub_service_id?.id
+      );
+      let subServiceObj = {
+        label: subServiceSetValue?.name,
+        value: subServiceSetValue?.id,
+      };
 
-  const subServiceOptions = (subServiceListByID?.data || []).map(
-    (item: any) => ({
-      label: item.name || "Unknown",
-      value: item.id,
-    })
-  );
+      const serviceSetValue = serviceList?.data?.find(
+        (item: any) => item.id === subServiceSetValue?.service_id
+      );
+
+      let serviceObj = {
+        label: serviceSetValue?.name,
+        value: serviceSetValue?.id,
+      };
+
+      let categoryValue = categoryData?.data?.find(
+        (item: any) => item.id === productData?.category_id
+      );
+
+      let categoryObj = {
+        label: categoryValue?.name,
+        value: categoryValue?.id,
+        factors: categoryValue?.factors || [],
+      };
+
+      for (let i = 0; i < productData?.factors?.length; i++) {
+        setValue(
+          `factors.${Object.keys(productData?.factors[i])[0]}`,
+          productData?.factors[i][Object.keys(productData?.factors[i])[0]]
+        );
+      }
+      setValue("service", serviceObj);
+      setValue("sub_service", subServiceObj);
+      setValue("capacity", productData.capacity);
+      setValue("name", productData.name);
+      setValue("vendors", productData.vendors || []);
+      setValue("type", productData.type);
+      setValue("product_category", categoryObj);
+      setSelectedCategory(categoryObj);
+    }
+  }, [productData, subServiceListData, serviceList, categoryData]);
 
   return (
     <>
       <Box className="flex flex-col gap-8">
         <Box className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">
-            {productData ? "Update Product" : "Add Product"}
+            {productData?.id ? "Update Product" : "Add Product"}
           </h2>
-          <IconButton onClick={handleCloseModalForAddLocation}>
+          <IconButton onClick={handleCloseModalForAddProduct}>
             <CloseIcon />
           </IconButton>
         </Box>
@@ -213,6 +286,7 @@ const AddProduct = (props: any) => {
                 rules={{
                   required: "This field is required",
                 }}
+                type="number"
               />
               <RHFTextField
                 name="unit"
@@ -220,6 +294,7 @@ const AddProduct = (props: any) => {
                 rules={{
                   required: "This field is required",
                 }}
+                type="number"
               />
             </Box>
 
@@ -259,41 +334,43 @@ const AddProduct = (props: any) => {
               />
             </Box>
 
-            <Box>
-              <Controller
-                name="factors"
-                control={control}
-                render={({ field }) => (
-                  <Autocomplete
-                    {...field}
-                    multiple
-                    options={[]}
-                    value={factorsArray}
-                    onChange={handleFactorsChange}
-                    freeSolo
-                    renderTags={(value, getTagProps) =>
-                      value.map((option, index) => (
-                        <Chip
-                          variant="outlined"
-                          label={option}
-                          {...getTagProps({ index })}
-                        />
-                      ))
-                    }
-                    renderInput={(params) => (
-                      <RHFTextField
-                        {...params}
-                        name="factors"
-                        label="Factors"
-                        rules={{
-                          required: "This field is required",
-                        }}
-                      />
-                    )}
-                  />
-                )}
+            <FormControl>
+              <RHFAutocomplete
+                name="product_category"
+                options={categoryDataOptions}
+                getOptionLabel={(option) => option?.label || ""}
+                isOptionEqualToValue={(option: any, value: any) =>
+                  option?.value === value?.value
+                }
+                label="Product Category"
+                rules={{ required: "This field is required" }}
+                onChange={handleCategoryChange}
+                value={selectedCategory}
               />
+            </FormControl>
+
+            <Box className="grid grid-cols-2 gap-4 items-center mt-4">
+              {selectedCategory?.factors?.map((factor: any, index: any) => {
+                return (
+                  <RHFTextField
+                    key={index}
+                    name={`factors.${factor
+                      .replace(/ *\([^)]*\) */g, "")
+                      .split("/")[0]
+                      .replace(/\s+/g, "_")
+                      .toLowerCase()}`}
+                    label={factor}
+                    type="text"
+                    rules={
+                      {
+                        // required: "This field is required",
+                      }
+                    }
+                  />
+                );
+              })}
             </Box>
+
             <Button
               variant="contained"
               fullWidth
@@ -301,7 +378,7 @@ const AddProduct = (props: any) => {
               type="submit"
               disabled={isSubmitting ? true : false}
             >
-              {productData ? "Update Product" : "Add Product"}
+              {productData?.id ? "Update Product" : "Add Product"}
             </Button>
           </form>
         </FormProvider>

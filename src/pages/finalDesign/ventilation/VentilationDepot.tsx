@@ -44,7 +44,7 @@ const VentilationDepot = () => {
             <Divider />
           </Box>
           <Box className="grid grid-cols-4 gap-4 mb-4">
-            {fieldDetails.map(({ name, label }) => (
+            {fieldDetails?.map(({ name, label }) => (
               <RHFTextField
                 key={`${section}.${name}`}
                 name={`${section.replace(/\s+/g, "_").toLowerCase()}.${name}`}
