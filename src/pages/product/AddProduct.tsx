@@ -113,6 +113,7 @@ const AddProduct = (props: any) => {
   };
 
   const onSubmit = async (data: FormValues) => {
+    console.log(data, "datadatadatadata");
     const array = handleData(data.factors);
     const reqObject = {
       url: productData?.id ? `products/${productData?.id}` : "products",
@@ -122,7 +123,7 @@ const AddProduct = (props: any) => {
         type: productTypeArray,
         vendors: vendorArray,
         sub_service_id: newSelectedSubService,
-        category_id: categoryId,
+        category_id: data.product_category?.value,
         factors: array,
       },
     };

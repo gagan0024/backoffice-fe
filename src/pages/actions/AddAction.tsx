@@ -19,7 +19,7 @@ interface FormValues {
   sub_service_id: any;
   service: any;
   calculation_type: any;
-  sub_service:any;
+  sub_service: any;
 }
 
 const AddActions = (props: any) => {
@@ -36,8 +36,7 @@ const AddActions = (props: any) => {
   const { data: serviceList } = useGetServiceListQuery({});
   const selectedService = watch("service");
   const newSelectedService = selectedService?.value;
-
-  const { data: subServiceList } = useGetSubServiceListQuery({});
+  const { data: subServiceListData } = useGetSubServiceListQuery({});
   const selectedSubService = watch("sub_service");
   const newSelectedSubService = selectedSubService?.value;
 
@@ -100,22 +99,30 @@ const AddActions = (props: any) => {
 
   useEffect(() => {
     if (actionsData?.id) {
-      let tempType = serviceList?.data?.find(
-        (item: any) => item.id === actionsData.id
+      const subServiceSetValue = subServiceListData?.data.find(
+        (item: any) => item.id === actionsData?.sub_service_id?.id
+      );
+      let subServiceObj = {
+        label: subServiceSetValue?.name,
+        value: subServiceSetValue?.id,
+      };
+
+      const serviceSetValue = serviceList?.data?.find(
+        (item: any) => item.id === subServiceSetValue?.service_id
       );
 
-      let newObj = {
-        label: tempType?.name,
-        value: tempType?.id,
+      let serviceObj = {
+        label: serviceSetValue?.name,
+        value: serviceSetValue?.id,
       };
 
       let caclObj = calculationArray.find(
         (item: any) => item.value === actionsData.calculation_type
       );
-
       setValue("name", actionsData.name);
       setValue("description", actionsData.description);
-      setValue("service", newObj);
+      setValue("service", serviceObj);
+      setValue("sub_service", subServiceObj);
       setValue("calculation_type", caclObj);
     } else {
       reset();

@@ -117,7 +117,7 @@ const FinalDesign = () => {
       });
     }
   };
-
+  console.log(selectedBuilding, "selectedBuilding");
   const serviceOptions = Array.isArray(serviceList?.data)
     ? serviceList?.data.map((item: any) => ({
         label: item.name || "Unknown",
@@ -414,7 +414,10 @@ const FinalDesign = () => {
                   action?.calculation_type !== "BUILDING" &&
                   action?.calculation_type !== "SUB_BUILDING" &&
                   action?.calculation_type !== "LEVEL" &&
-                  action?.calculation_type !== "ROOM"
+                  action?.calculation_type !== "ROOM" &&
+                  selectedBuilding?.label !== "Underground Metro Station" &&
+                  selectedBuilding?.label !== "Elevated Metro Station" &&
+                  selectedBuilding?.label !== "Depot"
                 }
               >
                 Next
