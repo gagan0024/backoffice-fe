@@ -29,7 +29,7 @@ interface FormValues {
   sub_service: any;
   service: any;
   factors: any;
-  unit: number;
+  unit: any;
   product_category: any;
 }
 
@@ -45,7 +45,6 @@ const AddProduct = (props: any) => {
   } = methods;
   const [productTypeArray, setProductTypeArray] = useState<any[]>([]);
   const [vendorArray, setVendorArray] = useState<any[]>([]);
-  const [categoryId, setCategoryId] = useState<any>("");
   const [updateProduct] = useUpdateProductMutation();
   const [addProduct] = useAddProductMutation();
   const { data: serviceList } = useGetServiceListQuery({});
@@ -59,7 +58,6 @@ const AddProduct = (props: any) => {
 
   const selectedSubService = watch("sub_service");
   const newSelectedSubService = selectedSubService?.value;
-
   const { data: categoryData } = useGetCategoryListQuery({});
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
@@ -98,7 +96,6 @@ const AddProduct = (props: any) => {
 
   const handleCategoryChange = (event: any, value: any) => {
     setSelectedCategory(value);
-    setCategoryId(value?.value);
     // @ts-ignore
     setValue("product_category", value);
   };
@@ -113,18 +110,18 @@ const AddProduct = (props: any) => {
   };
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data, "datadatadatadata");
     const array = handleData(data.factors);
     const reqObject = {
       url: productData?.id ? `products/${productData?.id}` : "products",
       body: {
         name: data.name,
         capacity: data.capacity,
-        type: productTypeArray,
-        vendors: vendorArray,
+        type: data.type,
+        vendors: data.vendors,
         sub_service_id: newSelectedSubService,
         category_id: data.product_category?.value,
         factors: array,
+        unit: data.unit,
       },
     };
     try {
@@ -185,9 +182,10 @@ const AddProduct = (props: any) => {
       setValue("sub_service", subServiceObj);
       setValue("capacity", productData.capacity);
       setValue("name", productData.name);
-      setValue("vendors", productData.vendors || []);
-      setValue("type", productData.type);
+      setVendorArray(productData.vendors);
+      setProductTypeArray(productData.type);
       setValue("product_category", categoryObj);
+      setValue("unit", productData.unit);
       setSelectedCategory(categoryObj);
     }
   }, [productData, subServiceListData, serviceList, categoryData]);
@@ -303,12 +301,13 @@ const AddProduct = (props: any) => {
               <Controller
                 name="vendors"
                 control={control}
+                defaultValue={[]}
                 render={({ field }) => (
                   <Autocomplete
                     {...field}
                     multiple
                     options={[]}
-                    value={vendorArray}
+                    value={vendorArray || []}
                     onChange={handleVendorChange}
                     freeSolo
                     renderTags={(value, getTagProps) =>

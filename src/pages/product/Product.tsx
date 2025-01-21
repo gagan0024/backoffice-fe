@@ -28,7 +28,7 @@ const Product = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { data: productDataList, isFetching } = useGetProductListQuery({});
-  const [productData, setProductData] = useState<object>({});
+  const [productData, setProductData] = useState<any>({});
   const [productDataDelete, setProductDataDelete] = useState<object>({});
   const [deleteProduct] = useDeleteProductMutation();
 
@@ -38,6 +38,7 @@ const Product = () => {
 
   const handleOpenModalForAddLocation = () => {
     setOpen(true);
+    setProductData(null);
   };
 
   const handleEditProduct = (item: any) => {
