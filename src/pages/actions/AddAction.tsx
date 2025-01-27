@@ -134,7 +134,7 @@ const AddActions = (props: any) => {
       <Box className="flex flex-col gap-8">
         <Box className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">
-            {actionsData ? "Update Action" : "Add Action"}
+            {actionsData.id ? "Update Action" : "Add Action"}
           </h2>
           <IconButton onClick={handleCloseModalForAddLocation}>
             <CloseIcon />
@@ -222,7 +222,7 @@ const AddActions = (props: any) => {
               type="submit"
               disabled={isSubmitting ? true : false}
             >
-              {actionsData ? "Update Action" : "Add Action"}
+              {actionsData.id ? "Update Action" : "Add Action"}
             </Button>
           </form>
         </FormProvider>

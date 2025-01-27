@@ -14,13 +14,13 @@ import {
   useLazyGetSubBuildingListQuery,
 } from "../../redux/api/api";
 
+import { toast } from "react-toastify";
 import VentilationElevated from "./ventilation/VentilationElevated";
 import VentilationDepot from "./ventilation/VentilationDepot";
 import VentilationUnderground from "./ventilation/VentilationUnderground";
 import DailuxElevated from "./dailux/DailuxElevatedStation";
 import DailuxUnderground from "./dailux/DailuxUndergroundStation";
 import DailuxDepot from "./dailux/DailuxDepotStation";
-import { toast } from "react-toastify";
 import CableElevated from "./cableSizing/CableElevated";
 import CableUnderground from "./cableSizing/CableUnderground";
 import CableDepot from "./cableSizing/CableDepot";
@@ -30,6 +30,20 @@ import HeatLoadDepot from "./heatLoad/HeatLoadDepot";
 import ElectricalPanelElevated from "./equipmentLoad/ElectricalPanelElevated";
 import ElectricalPanelUnderground from "./equipmentLoad/ElectricalPanelUnderground";
 import ElectricalPanelDepot from "./equipmentLoad/ElectricalPanelDepot";
+import PlumbingWaterDemandDepot from "./plumbingWaterDemand/PlumbingWaterDemandDepot";
+import PlumbingWaterDemandElevated from "./plumbingWaterDemand/PlumbingWaterDemandElevated";
+import PlumbingWaterDemandUnderground from "./plumbingWaterDemand/PlumbingWaterDemandUnderground";
+import DrainageDepot from "./drainagePipeSizing/DrainageDepot";
+import DrainageElevated from "./drainagePipeSizing/DrainageElevated";
+import DrainageUnderground from "./drainagePipeSizing/DrainageUnderground";
+import PlumbingHeadlossElevated from "./plumbingHeadLoss/PlumbingHeadlossElevated";
+import PlumbingHeadlossUnderground from "./plumbingHeadLoss/PlumbingHeadlossUnderground";
+import PlumbingHeadlossDepot from "./plumbingHeadLoss/PlumbingHeadlossDepot";
+import PlumbingWaterSupplyPipeSizingDepot from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingDepot";
+import PlumbingWaterSupplyPipeSizingElevated from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingElevated";
+import PlumbingWaterSupplyPipeSizingUnderground from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingUnderground";
+import FireHeadlossElevated from "./FireHeadloss/FireHeadlossElevated";
+import FireHeadlossUnderground from "./FireHeadloss/FireHeadlossUnderground";
 
 const FinalDesign = () => {
   const methods = useForm();
@@ -437,6 +451,21 @@ const FinalDesign = () => {
                   <>
                     {buildingCheck?.label === "Elevated Metro Station" && (
                       <DailuxElevated />
+                      // <PlumbingWaterDemandDepot/>
+                      // <PlumbingWaterDemandElevated />
+                      // <PlumbingWaterDemandUnderground/>
+                      // <DrainageDepot/>
+                      // <DrainageUnderground/>
+                      //  <DrainageElevated/>
+                      // <PlumbingHeadlossElevated />
+                      // <PlumbingHeadlossUnderground/>
+                      // <PlumbingHeadlossDepot/>
+                      // <PlumbingWaterSupplyPipeSizingDepot/>
+                      // <PlumbingWaterSupplyPipeSizingElevated/>
+                      // <PlumbingWaterSupplyPipeSizingUnderground/>
+                      // <FireHeadlossDepot />
+                      // <FireHeadlossElevated/>
+                      // <FireHeadlossUnderground/>
                     )}
                     {buildingCheck?.label === "Underground Metro Station" && (
                       <DailuxUnderground />

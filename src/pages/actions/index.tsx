@@ -38,6 +38,7 @@ const Actions = () => {
 
   const handleOpenModalForAddLocation = () => {
     setOpen(true);
+    setActionsData({});
   };
 
   const handleEditLocation = (item: any) => {
