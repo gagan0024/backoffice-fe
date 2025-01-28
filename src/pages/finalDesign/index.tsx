@@ -44,6 +44,13 @@ import PlumbingWaterSupplyPipeSizingElevated from "./pumbingWaterSupplyPipeSizin
 import PlumbingWaterSupplyPipeSizingUnderground from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingUnderground";
 import FireHeadlossElevated from "./FireHeadloss/FireHeadlossElevated";
 import FireHeadlossUnderground from "./FireHeadloss/FireHeadlossUnderground";
+import PlumbingRainWaterPipeDropDepot from "./plumbingRainWaterPipeDropping/PlumbingRainWaterPipeDropDepot";
+import PlumbingRainWaterPipeDropElevated from "./plumbingRainWaterPipeDropping/PlumbingRainWaterPipeDropElevated";
+import PlumbingRainWaterPipeDropUnderground from "./plumbingRainWaterPipeDropping/PlumbingRainWaterPipeDropUnderground";
+import SeepagePumpSizingUnderground from "./seepagePumpSizing/SeepagePumpSizingUnderground";
+import PlumbingRWHDepot from "./plumbingRWH/PlumbingRWHDepot";
+import PlumbingRWHElevated from "./plumbingRWH/PlumbingRWHElevated";
+import PlumbingRWHUnderground from "./plumbingRWH/PlumbingRWHUnderground";
 
 const FinalDesign = () => {
   const methods = useForm();
@@ -450,7 +457,7 @@ const FinalDesign = () => {
                 {subServiceCheck?.label === "Lighting" && (
                   <>
                     {buildingCheck?.label === "Elevated Metro Station" && (
-                      <DailuxElevated />
+                      // <DailuxElevated />
                       // <PlumbingWaterDemandDepot/>
                       // <PlumbingWaterDemandElevated />
                       // <PlumbingWaterDemandUnderground/>
@@ -466,6 +473,13 @@ const FinalDesign = () => {
                       // <FireHeadlossDepot />
                       // <FireHeadlossElevated/>
                       // <FireHeadlossUnderground/>
+                      // <PlumbingRainWaterPipeDropDepot />
+                      // <PlumbingRainWaterPipeDropElevated/>
+                      // <PlumbingRainWaterPipeDropUnderground/>
+                      // <SeepagePumpSizingUnderground/>
+                      // <PlumbingRWHDepot />
+                      // <PlumbingRWHElevated/>
+                      <PlumbingRWHUnderground/>
                     )}
                     {buildingCheck?.label === "Underground Metro Station" && (
                       <DailuxUnderground />
