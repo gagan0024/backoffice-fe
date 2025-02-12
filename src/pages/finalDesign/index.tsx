@@ -138,7 +138,7 @@ const FinalDesign = () => {
       });
     }
   };
-  console.log(selectedBuilding, "selectedBuilding");
+
   const serviceOptions = Array.isArray(serviceList?.data)
     ? serviceList?.data.map((item: any) => ({
         label: item.name || "Unknown",
@@ -457,7 +457,7 @@ const FinalDesign = () => {
                 {subServiceCheck?.label === "Lighting" && (
                   <>
                     {buildingCheck?.label === "Elevated Metro Station" && (
-                      // <DailuxElevated />
+                      <DailuxElevated />
                       // <PlumbingWaterDemandDepot/>
                       // <PlumbingWaterDemandElevated />
                       // <PlumbingWaterDemandUnderground/>
@@ -479,7 +479,7 @@ const FinalDesign = () => {
                       // <SeepagePumpSizingUnderground/>
                       // <PlumbingRWHDepot />
                       // <PlumbingRWHElevated/>
-                      <PlumbingRWHUnderground/>
+                      // <PlumbingRWHUnderground/>
                     )}
                     {buildingCheck?.label === "Underground Metro Station" && (
                       <DailuxUnderground />

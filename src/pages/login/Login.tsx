@@ -127,7 +127,7 @@ const Login = () => {
             padding: 4,
           }}
         >
-          <Box>
+          <Box sx={{width:"500px"}}>
             <Typography variant="h4" sx={{ mb: 2, fontWeight: "bold" }}>
               Welcome!
             </Typography>
