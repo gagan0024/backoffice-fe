@@ -7,7 +7,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { RootState } from "./redux/store";
 import { accessAdminTokken, logoutAction } from "./redux/slices/loingSlice";
-export const apiRoot = import.meta.env.VITE_API_ROOT;
+export const apiRoot = "http://api.designdrafter.co.in/";
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
