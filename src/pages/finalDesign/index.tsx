@@ -30,27 +30,27 @@ import HeatLoadDepot from "./heatLoad/HeatLoadDepot";
 import ElectricalPanelElevated from "./equipmentLoad/ElectricalPanelElevated";
 import ElectricalPanelUnderground from "./equipmentLoad/ElectricalPanelUnderground";
 import ElectricalPanelDepot from "./equipmentLoad/ElectricalPanelDepot";
-// import PlumbingWaterDemandDepot from "./plumbingWaterDemand/PlumbingWaterDemandDepot";
-// import PlumbingWaterDemandElevated from "./plumbingWaterDemand/PlumbingWaterDemandElevated";
-// import PlumbingWaterDemandUnderground from "./plumbingWaterDemand/PlumbingWaterDemandUnderground";
-// import DrainageDepot from "./drainagePipeSizing/DrainageDepot";
-// import DrainageElevated from "./drainagePipeSizing/DrainageElevated";
-// import DrainageUnderground from "./drainagePipeSizing/DrainageUnderground";
-// import PlumbingHeadlossElevated from "./plumbingHeadLoss/PlumbingHeadlossElevated";
-// import PlumbingHeadlossUnderground from "./plumbingHeadLoss/PlumbingHeadlossUnderground";
-// import PlumbingHeadlossDepot from "./plumbingHeadLoss/PlumbingHeadlossDepot";
-// import PlumbingWaterSupplyPipeSizingDepot from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingDepot";
-// import PlumbingWaterSupplyPipeSizingElevated from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingElevated";
-// import PlumbingWaterSupplyPipeSizingUnderground from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingUnderground";
-// import FireHeadlossElevated from "./FireHeadloss/FireHeadlossElevated";
-// import FireHeadlossUnderground from "./FireHeadloss/FireHeadlossUnderground";
-// import PlumbingRainWaterPipeDropDepot from "./plumbingRainWaterPipeDropping/PlumbingRainWaterPipeDropDepot";
-// import PlumbingRainWaterPipeDropElevated from "./plumbingRainWaterPipeDropping/PlumbingRainWaterPipeDropElevated";
-// import PlumbingRainWaterPipeDropUnderground from "./plumbingRainWaterPipeDropping/PlumbingRainWaterPipeDropUnderground";
-// import SeepagePumpSizingUnderground from "./seepagePumpSizing/SeepagePumpSizingUnderground";
-// import PlumbingRWHDepot from "./plumbingRWH/PlumbingRWHDepot";
-// import PlumbingRWHElevated from "./plumbingRWH/PlumbingRWHElevated";
-// import PlumbingRWHUnderground from "./plumbingRWH/PlumbingRWHUnderground";
+import PlumbingWaterDemandDepot from "./plumbingWaterDemand/PlumbingWaterDemandDepot";
+import PlumbingWaterDemandElevated from "./plumbingWaterDemand/PlumbingWaterDemandElevated";
+import PlumbingWaterDemandUnderground from "./plumbingWaterDemand/PlumbingWaterDemandUnderground";
+import DrainageDepot from "./drainagePipeSizing/DrainageDepot";
+import DrainageElevated from "./drainagePipeSizing/DrainageElevated";
+import DrainageUnderground from "./drainagePipeSizing/DrainageUnderground";
+import PlumbingHeadlossElevated from "./plumbingHeadLoss/PlumbingHeadlossElevated";
+import PlumbingHeadlossUnderground from "./plumbingHeadLoss/PlumbingHeadlossUnderground";
+import PlumbingHeadlossDepot from "./plumbingHeadLoss/PlumbingHeadlossDepot";
+import PlumbingWaterSupplyPipeSizingDepot from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingDepot";
+import PlumbingWaterSupplyPipeSizingElevated from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingElevated";
+import PlumbingWaterSupplyPipeSizingUnderground from "./pumbingWaterSupplyPipeSizing/PlumbingWaterSupplyPipeSizingUnderground";
+import FireHeadlossElevated from "./FireHeadloss/FireHeadlossElevated";
+import FireHeadlossUnderground from "./FireHeadloss/FireHeadlossUnderground";
+import PlumbingRainWaterPipeDropDepot from "./plumbingRainWaterPipeDropping/PlumbingRainWaterPipeDropDepot";
+import PlumbingRainWaterPipeDropElevated from "./plumbingRainWaterPipeDropping/PlumbingRainWaterPipeDropElevated";
+import PlumbingRainWaterPipeDropUnderground from "./plumbingRainWaterPipeDropping/PlumbingRainWaterPipeDropUnderground";
+import SeepagePumpSizingUnderground from "./seepagePumpSizing/SeepagePumpSizingUnderground";
+import PlumbingRWHDepot from "./plumbingRWH/PlumbingRWHDepot";
+import PlumbingRWHElevated from "./plumbingRWH/PlumbingRWHElevated";
+import PlumbingRWHUnderground from "./plumbingRWH/PlumbingRWHUnderground";
 
 const FinalDesign = () => {
   const methods = useForm();
@@ -452,28 +452,6 @@ const FinalDesign = () => {
                   <>
                     {buildingCheck?.label === "Elevated Metro Station" && (
                       <DailuxElevated />
-                      // <PlumbingWaterDemandDepot/>
-                      // <PlumbingWaterDemandElevated />
-                      // <PlumbingWaterDemandUnderground/>
-                      // <DrainageDepot/>
-                      // <DrainageUnderground/>
-                      //  <DrainageElevated/>
-                      // <PlumbingHeadlossElevated />
-                      // <PlumbingHeadlossUnderground/>
-                      // <PlumbingHeadlossDepot/>
-                      // <PlumbingWaterSupplyPipeSizingDepot/>
-                      // <PlumbingWaterSupplyPipeSizingElevated/>
-                      // <PlumbingWaterSupplyPipeSizingUnderground/>
-                      // <FireHeadlossDepot />
-                      // <FireHeadlossElevated/>
-                      // <FireHeadlossUnderground/>
-                      // <PlumbingRainWaterPipeDropDepot />
-                      // <PlumbingRainWaterPipeDropElevated/>
-                      // <PlumbingRainWaterPipeDropUnderground/>
-                      // <SeepagePumpSizingUnderground/>
-                      // <PlumbingRWHDepot />
-                      // <PlumbingRWHElevated/>
-                      // <PlumbingRWHUnderground/>
                     )}
                     {buildingCheck?.label === "Underground Metro Station" && (
                       <DailuxUnderground />
@@ -492,7 +470,6 @@ const FinalDesign = () => {
                     {buildingCheck?.label === "Depot" && <VentilationDepot />}
                   </>
                 )}
-
                 {subServiceCheck?.label === "Containment" && (
                   <>
                     {buildingCheck?.label === "Elevated Metro Station" && (
@@ -504,7 +481,6 @@ const FinalDesign = () => {
                     {buildingCheck?.label === "Depot" && <CableDepot />}
                   </>
                 )}
-
                 {subServiceCheck?.label === "Chilled Water System" && (
                   <>
                     {action?.label === "heat load" && (
@@ -532,6 +508,127 @@ const FinalDesign = () => {
                         {buildingCheck?.label === "Depot" && (
                           <ElectricalPanelDepot />
                         )}
+                      </>
+                    )}
+                  </>
+                )}
+                {subServiceCheck?.label === "Water Supply" && (
+                  <>
+                    {action?.label === "PlumbingWaterDemand" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <PlumbingWaterDemandElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <PlumbingWaterDemandUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && (
+                          <PlumbingWaterDemandDepot />
+                        )}
+                      </>
+                    )}
+
+                    {action?.label === "Head Loss Calculation" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <PlumbingHeadlossElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <PlumbingHeadlossUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && (
+                          <PlumbingHeadlossDepot />
+                        )}
+                      </>
+                    )}
+
+                    {action?.label === "PlumbingWaterSupplyPipeSizing" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <PlumbingWaterSupplyPipeSizingElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <PlumbingWaterSupplyPipeSizingUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && (
+                          <PlumbingWaterSupplyPipeSizingDepot />
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+                {subServiceCheck?.label === "Drainage" && (
+                  <>
+                    {action?.label === "Drainage Pipe Sizing" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <DrainageElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <DrainageUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && <DrainageDepot />}
+                      </>
+                    )}
+
+                    {action?.label === "PlumbingRainWaterPipeDrop" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <PlumbingRainWaterPipeDropElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <PlumbingRainWaterPipeDropUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && (
+                          <PlumbingRainWaterPipeDropDepot />
+                        )}
+                      </>
+                    )}
+
+                    {action?.label === "SeepagePumpSizingUnderground" && (
+                      <>
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <SeepagePumpSizingUnderground />
+                        )}
+                      </>
+                    )}
+
+                    {action?.label === "PlumbingRWH" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <PlumbingRWHElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <PlumbingRWHUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && (
+                          <PlumbingRWHDepot />
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+                {subServiceCheck?.label === "Hydrant System" && (
+                  <>
+                    {action?.label === "Head Loss Calculation" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <FireHeadlossElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <FireHeadlossUnderground />
+                        )}
+                        {/* {buildingCheck?.label === "Depot" && (
+                          <FireHeadlossDepot />
+                        )} */}
                       </>
                     )}
                   </>
