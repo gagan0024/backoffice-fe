@@ -51,6 +51,18 @@ import SeepagePumpSizingUnderground from "./seepagePumpSizing/SeepagePumpSizingU
 import PlumbingRWHDepot from "./plumbingRWH/PlumbingRWHDepot";
 import PlumbingRWHElevated from "./plumbingRWH/PlumbingRWHElevated";
 import PlumbingRWHUnderground from "./plumbingRWH/PlumbingRWHUnderground";
+import DailuxResidential from "./dailux/DialuxResidential";
+import DailuxOffice from "./dailux/DialuxOffice";
+import DailuxDataCenter from "./dailux/DialuxDataCenter";
+import DailuxHotel from "./dailux/DialuxHotel";
+import DailuxMall from "./dailux/DialuxMall";
+import DailuxSchool from "./dailux/DialuxSchool";
+import HeatLoadResidential from "./heatLoad/HeatLoadResidential";
+import HeatLoadOffice from "./heatLoad/HeatLoadOffice";
+import HeatLoadDataCenter from "./heatLoad/HeatLoadDataCenter";
+import HeatLoadHotel from "./heatLoad/HeatLoadHotel";
+import HeatLoadMall from "./heatLoad/HeatLoadMall";
+import HeatLoadSchool from "./heatLoad/HeatLoadSchool";
 
 const FinalDesign = () => {
   const methods = useForm();
@@ -457,6 +469,16 @@ const FinalDesign = () => {
                       <DailuxUnderground />
                     )}
                     {buildingCheck?.label === "Depot" && <DailuxDepot />}
+                    {buildingCheck?.label === "Residential" && (
+                      <DailuxResidential />
+                    )}
+                    {buildingCheck?.label === "Office" && <DailuxOffice />}
+                    {buildingCheck?.label === "Data Center" && (
+                      <DailuxDataCenter />
+                    )}
+                    {buildingCheck?.label === "Hotel" && <DailuxHotel />}
+                    {buildingCheck?.label === "Mall" && <DailuxMall />}
+                    {buildingCheck?.label === "School" && <DailuxSchool />}
                   </>
                 )}
                 {subServiceCheck?.label === "Ventilation" && (
@@ -481,6 +503,68 @@ const FinalDesign = () => {
                     {buildingCheck?.label === "Depot" && <CableDepot />}
                   </>
                 )}
+                {subServiceCheck?.label === "VRF / VRV" && (
+                  <>
+                    {action?.label === "heat load" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <HeatLoadElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <HeatLoadUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && <HeatLoadDepot />}
+
+                        {buildingCheck?.label === "Residential" && (
+                          <HeatLoadResidential />
+                        )}
+                        {buildingCheck?.label === "Office" && (
+                          <HeatLoadOffice />
+                        )}
+                        {buildingCheck?.label === "Data Center" && (
+                          <HeatLoadDataCenter />
+                        )}
+                        {buildingCheck?.label === "Hotel" && <HeatLoadHotel />}
+                        {buildingCheck?.label === "Mall" && <HeatLoadMall />}
+                        {buildingCheck?.label === "School" && (
+                          <HeatLoadSchool />
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+                {subServiceCheck?.label === "Direct Expansion" && (
+                  <>
+                    {action?.label === "heat load" && (
+                      <>
+                        {buildingCheck?.label === "Elevated Metro Station" && (
+                          <HeatLoadElevated />
+                        )}
+                        {buildingCheck?.label ===
+                          "Underground Metro Station" && (
+                          <HeatLoadUnderground />
+                        )}
+                        {buildingCheck?.label === "Depot" && <HeatLoadDepot />}
+
+                        {buildingCheck?.label === "Residential" && (
+                          <HeatLoadResidential />
+                        )}
+                        {buildingCheck?.label === "Office" && (
+                          <HeatLoadOffice />
+                        )}
+                        {buildingCheck?.label === "Data Center" && (
+                          <HeatLoadDataCenter />
+                        )}
+                        {buildingCheck?.label === "Hotel" && <HeatLoadHotel />}
+                        {buildingCheck?.label === "Mall" && <HeatLoadMall />}
+                        {buildingCheck?.label === "School" && (
+                          <HeatLoadSchool />
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
                 {subServiceCheck?.label === "Chilled Water System" && (
                   <>
                     {action?.label === "heat load" && (
@@ -493,6 +577,21 @@ const FinalDesign = () => {
                           <HeatLoadUnderground />
                         )}
                         {buildingCheck?.label === "Depot" && <HeatLoadDepot />}
+
+                        {buildingCheck?.label === "Residential" && (
+                          <HeatLoadResidential />
+                        )}
+                        {buildingCheck?.label === "Office" && (
+                          <HeatLoadOffice />
+                        )}
+                        {buildingCheck?.label === "Data Center" && (
+                          <HeatLoadDataCenter />
+                        )}
+                        {buildingCheck?.label === "Hotel" && <HeatLoadHotel />}
+                        {buildingCheck?.label === "Mall" && <HeatLoadMall />}
+                        {buildingCheck?.label === "School" && (
+                          <HeatLoadSchool />
+                        )}
                       </>
                     )}
 
