@@ -1,0 +1,169 @@
+import { Box, Button, IconButton } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import RHFAutocomplete from "../../components/RHF/RHFAutocomplete";
+import RHFTextField from "../../components/RHF/RHFTextField";
+import { FormProvider, useForm } from "react-hook-form";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  useAddProductSubServiceMutation,
+  useAddSubServiceMutation,
+  useGetServiceListQuery,
+  useUpdateProductSubServiceMutation,
+  useUpdateSubServiceMutation,
+} from "../../redux/api/api";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
+
+interface FormValues {
+  service: any;
+  name: string;
+  description: string;
+}
+
+const AddProductSubService = (props: any) => {
+  const { setOpen, updateProductSubServiceID } = props;
+  const methods = useForm<FormValues>();
+  const {
+    reset,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = methods;
+  const [addProductSubService] = useAddProductSubServiceMutation();
+  const [updateProductSubService] = useUpdateProductSubServiceMutation();
+  const { data: serviceList } = useGetServiceListQuery({});
+
+  const onSubmit = async (data: FormValues) => {
+    const reqObject = {
+      url: updateProductSubServiceID?.id
+        ? `product-sub-services/${updateProductSubServiceID.id}`
+        : "product-sub-services",
+      body: {
+        service_id: data.service.value,
+        name: data.name,
+        description: data.description,
+      },
+    };
+    try {
+      if (updateProductSubServiceID?.id) {
+        const resp: any = await updateProductSubService(reqObject).unwrap();
+        if (resp.status === 3014) {
+          toast.success(resp.message);
+        }
+      } else {
+        const resp: any = await addProductSubService(reqObject).unwrap();
+        if (resp.status === 3011) {
+          toast.success(resp.message);
+        }
+      }
+      reset();
+      setOpen(false);
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+
+  // Pre-fill form fields when editing
+  useEffect(() => {
+    if (updateProductSubServiceID?.id) {
+      let tempType = serviceList?.data?.find(
+        (item: any) => item.id === updateProductSubServiceID.service_id
+      );
+      let newObj = {
+        label: tempType?.name,
+        value: tempType?.id,
+      };
+      setValue("name", updateProductSubServiceID.name);
+      setValue("description", updateProductSubServiceID.description);
+      setValue("service", newObj);
+    } else {
+      reset();
+    }
+  }, [updateProductSubServiceID.id, setValue, reset, serviceList]);
+
+  const handleCloseModalForAddBuildings = () => {
+    setOpen(false);
+    reset();
+  };
+
+  return (
+    <Box className="w-full bg-white">
+      {/* Header */}
+      <Box className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold">
+          {updateProductSubServiceID?.id
+            ? "Edit Product Sub-Service"
+            : "Add Product Sub-Service"}
+        </h2>
+        <IconButton onClick={handleCloseModalForAddBuildings}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+
+      {/* Form */}
+      <FormProvider {...methods}>
+        <form
+          className="flex gap-4 flex-col w-full justify-between h-[75vh]"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Box className="flex flex-col gap-4">
+            <FormControl fullWidth>
+              <RHFAutocomplete
+                name="service"
+                options={
+                  serviceList?.data?.map((item: any) => ({
+                    label: item.name || "Unknown",
+                    value: item.id,
+                  })) || []
+                }
+                getOptionLabel={(option) => option?.label || ""}
+                isOptionEqualToValue={(option: any, value: any) =>
+                  option?.value === value?.value
+                }
+                label="Service"
+                rules={{ required: "This field is required" }}
+              />
+            </FormControl>
+
+            {/* Sub-Building Type Field */}
+            <RHFTextField
+              name="name"
+              label="Sub-Service"
+              rules={{
+                required: "This field is required",
+              }}
+            />
+
+            {/* Description Field */}
+            <RHFTextField
+              name="description"
+              label="Description"
+              multiline
+              rows={4}
+              rules={{
+                required: "This field is required",
+              }}
+            />
+          </Box>
+
+          {/* Submit Button */}
+          <Box>
+            <Button
+              type="submit"
+              size="large"
+              variant="contained"
+              fullWidth
+              disabled={isSubmitting ? true : false}
+            >
+              {updateProductSubServiceID?.id
+                ? "Edit Product Sub-Service"
+                : "Add Product Sub-Service"}
+            </Button>
+          </Box>
+        </form>
+      </FormProvider>
+    </Box>
+  );
+};
+
+export default AddProductSubService;

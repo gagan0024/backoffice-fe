@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { accessAdminTokken } from "../../redux/slices/loingSlice";
+import { accessAdminTokken, setAdminRole } from "../../redux/slices/loingSlice";
 
 const Login = () => {
   const [loginAdmin] = useAdminLoginMutation();
@@ -30,6 +30,7 @@ const Login = () => {
       const resp: any = await loginAdmin(reqObject).unwrap();
       if (resp?.token) {
         dispatch(accessAdminTokken(resp?.token));
+        dispatch(setAdminRole(resp?.role));
       }
       if (resp?.token) {
         navigate("/home");
@@ -127,7 +128,7 @@ const Login = () => {
             padding: 4,
           }}
         >
-          <Box sx={{width:"500px"}}>
+          <Box sx={{ width: "500px" }}>
             <Typography variant="h4" sx={{ mb: 2, fontWeight: "bold" }}>
               Welcome!
             </Typography>

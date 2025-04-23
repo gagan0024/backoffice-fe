@@ -14,7 +14,7 @@ interface FormValues {
   description: string;
 }
 
-const AddBuilding = (props: any) => {
+const AddProduct = (props: any) => {
   const { setOpen, currentBuilding } = props;
   const [AddBuildingData] = useAddBuildingMutation();
   const [UpdateBuildingData] = useUpdateBuildingMutation();
@@ -123,4 +123,4 @@ const AddBuilding = (props: any) => {
   );
 };
 
-export default AddBuilding;
+export default AddProduct;
