@@ -8,6 +8,7 @@ import {
 import { RootState } from "./redux/store";
 import { accessAdminTokken, logoutAction } from "./redux/slices/loingSlice";
 export const apiRoot = "http://api.designdrafter.co.in/api/admin/";
+//export const apiRoot = "http://localhost:8080/api/admin/";
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({

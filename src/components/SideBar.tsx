@@ -7,7 +7,7 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
-import { Home, LocationOn, Apartment } from "@mui/icons-material";
+import { Home, LocationOn, Apartment, Factory } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import CategoryIcon from "@mui/icons-material/Category";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
@@ -17,34 +17,111 @@ import DynamicFormIcon from "@mui/icons-material/DynamicForm";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+
+interface MenuItem {
+  name: string;
+  icon: JSX.Element;
+  route: string;
+}
 
 const SideBar = () => {
   const navigate = useNavigate();
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const location = useLocation();
   const [selectedItem, setSelectedItem] = useState<string>("");
+  const role = useSelector((state: RootState) => state.adminLoginSlice.role);
+  useEffect(() => {
+    if (!role) return; // Don't do anything if role is null or undefined
 
-  // Define the menu items with icons and routes
-  const menuItems = [
-    { name: "Home", icon: <Home />, route: "/" },
-    { name: "Locations", icon: <LocationOn />, route: "/locations" },
-    { name: "Buildings", icon: <Apartment />, route: "/buildings" },
-    { name: "Sub-Buildings", icon: <CategoryIcon />, route: "/sub-buildings" },
-    { name: "Levels", icon: <ViewStreamIcon />, route: "/levels" },
-    { name: "Rooms", icon: <HouseIcon />, route: "/rooms" },
-    { name: "Services", icon: <SettingsIcon />, route: "/services" },
-    {
-      name: "Sub-Services",
-      icon: <SettingsSuggestIcon />,
-      route: "/sub-services",
-    },
-    { name: "Products", icon: <InventoryIcon />, route: "/product" },
-    { name: "Actions", icon: <DirectionsRunIcon />, route: "/actions" },
-    {
-      name: "Final Design Form",
-      icon: <DynamicFormIcon />,
-      route: "/final-design-form",
-    },
-  ];
+    console.log(role);
+
+    // Define the menu items with icons and routes
+    if (role === "ADMIN") {
+      setMenuItems([
+        { name: "Home", icon: <Home />, route: "/" },
+        { name: "Locations", icon: <LocationOn />, route: "/locations" },
+        { name: "Buildings", icon: <Apartment />, route: "/buildings" },
+        {
+          name: "Sub-Buildings",
+          icon: <CategoryIcon />,
+          route: "/sub-buildings",
+        },
+        { name: "Levels", icon: <ViewStreamIcon />, route: "/levels" },
+        { name: "Rooms", icon: <HouseIcon />, route: "/rooms" },
+        { name: "Services", icon: <SettingsIcon />, route: "/services" },
+        {
+          name: "Sub-Services",
+          icon: <SettingsSuggestIcon />,
+          route: "/sub-services",
+        },
+        { name: "Actions", icon: <DirectionsRunIcon />, route: "/actions" },
+        {
+          name: "Product Sub-Services",
+          icon: <SettingsSuggestIcon />,
+          route: "/product-sub-services",
+        },
+        { name: "Products", icon: <InventoryIcon />, route: "/product" },
+        { name: "Manufacturers", icon: <Factory />, route: "/manufacturer" },
+        {
+          name: "Final Product Form",
+          icon: <PrecisionManufacturingIcon />,
+          route: "/final-product-form",
+        },
+        {
+          name: "Final Design Form",
+          icon: <DynamicFormIcon />,
+          route: "/final-design-form",
+        },
+      ]);
+    } else if (role === "PRODUCT_ADMIN") {
+      setMenuItems([
+        { name: "Home", icon: <Home />, route: "/" },
+
+        { name: "Locations", icon: <LocationOn />, route: "/locations" },
+        { name: "Buildings", icon: <Apartment />, route: "/buildings" },
+
+        {
+          name: "Product Sub-Services",
+          icon: <SettingsSuggestIcon />,
+          route: "/product-sub-services",
+        },
+        { name: "Products", icon: <InventoryIcon />, route: "/product" },
+        {
+          name: "Final Product Form",
+          icon: <PrecisionManufacturingIcon />,
+          route: "/final-product-form",
+        },
+      ]);
+    } else if (role === "TECHNICAL_ADMIN") {
+      setMenuItems([
+        { name: "Home", icon: <Home />, route: "/" },
+
+        { name: "Locations", icon: <LocationOn />, route: "/locations" },
+        { name: "Buildings", icon: <Apartment />, route: "/buildings" },
+        {
+          name: "Sub-Buildings",
+          icon: <CategoryIcon />,
+          route: "/sub-buildings",
+        },
+        { name: "Rooms", icon: <HouseIcon />, route: "/rooms" },
+        { name: "Services", icon: <SettingsIcon />, route: "/services" },
+        {
+          name: "Sub-Services",
+          icon: <SettingsSuggestIcon />,
+          route: "/sub-services",
+        },
+        { name: "Actions", icon: <DirectionsRunIcon />, route: "/actions" },
+        {
+          name: "Final Design Form",
+          icon: <DynamicFormIcon />,
+          route: "/final-design-form",
+        },
+      ]);
+    }
+  }, []);
 
   // Update selected item based on the current route
   useEffect(() => {

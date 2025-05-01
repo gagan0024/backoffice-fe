@@ -3,7 +3,6 @@ import Home from "../pages/home";
 import Layout from "../layout";
 import Buildings from "../pages/buldings";
 import Locations from "../pages/location";
-import Product from "../pages/product/Product";
 import SubBuildings from "../pages/subBuildings";
 import Levels from "../pages/level";
 import Rooms from "../pages/room";
@@ -11,6 +10,10 @@ import FinalDesign from "../pages/finalDesign";
 import Service from "../pages/Services";
 import SubService from "../pages/SubService";
 import Actions from "../pages/actions";
+import ProductSubservice from "../pages/productSubservice";
+import Products from "../pages/product";
+import Manufacturer from "../pages/manufacturer";
+import FinalProduct from "../pages/finalProduct";
 
 const PrivateRoutes = () => {
   const allPrivateRoutes = useRoutes([
@@ -47,10 +50,6 @@ const PrivateRoutes = () => {
           element: <Rooms />,
         },
         {
-          path: "product",
-          element: <Product />,
-        },
-        {
           path: "services",
           element: <Service />,
         },
@@ -65,6 +64,22 @@ const PrivateRoutes = () => {
         {
           path: "final-design-form",
           element: <FinalDesign />,
+        },
+        {
+          path: "product",
+          element: <Products />,
+        },
+        {
+          path: "final-product-form",
+          element: <FinalProduct />,
+        },
+        {
+          path: "product-sub-services",
+          element: <ProductSubservice />,
+        },
+        {
+          path: "manufacturer",
+          element: <Manufacturer />,
         },
         {
           path: "*",
