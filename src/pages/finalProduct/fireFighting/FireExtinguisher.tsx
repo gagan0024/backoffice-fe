@@ -1,7 +1,7 @@
 import { FormControl } from "@mui/material";
 import RHFTextField from "../../../components/RHF/RHFTextField";
 
-const Power = () => {
+const FireExtinguisher = () => {
   return (
     <>
       <FormControl className="w-1/4">
@@ -13,40 +13,32 @@ const Power = () => {
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="voltage_rating"
-          label="Voltage Rating (V)"
+          name="extinguisher_type"
+          label="Extinguisher Type"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="current_rating"
-          label="Current Rating (A)"
+          name="size_and_capacity"
+          label="Size and Capacity"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="material_and_durability"
-          label="Material and Durability"
+          name="discharge_time_and_range"
+          label="Discharge Time and Range"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="grounding"
-          label="Grounding"
-          type="number"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="type_of_installation"
-          label="Type of Installation"
+          name="rechargeability"
+          label="Rechargeability"
           type="number"
           rules={{ required: true }}
         />
@@ -62,4 +54,4 @@ const Power = () => {
   );
 };
 
-export default Power;
+export default FireExtinguisher;

@@ -91,8 +91,8 @@ const FinalDesign = () => {
   const { data: buildingList } = useGetBuildingListQuery({});
   const [fetchSubBuildings, { data: subBuildingListData }] =
     useLazyGetSubBuildingListQuery();
-  const [fetchLevels, { data: levelsListData }] = useLazyGetLevelsListQuery();
-  const [fetchRooms, { data: roomListData }] = useLazyGetRoomsListQuery();
+  // const [fetchLevels, { data: levelsListData }] = useLazyGetLevelsListQuery();
+  // const [fetchRooms, { data: roomListData }] = useLazyGetRoomsListQuery();
   const [selectedBuilding, setSelectedBuilding] = useState<any>(null);
   const [selectedSubBuilding, setSelectedSubBuilding] = useState<any>(null);
   const [selectedLevel, setSelectedLevel] = useState<any>(null);
@@ -105,44 +105,45 @@ const FinalDesign = () => {
     loaction: false,
     building: false,
     sub_building: false,
-    level: false,
-    room: false,
+    // level: false,
+    // room: false,
   });
 
   const handleRenderCopm = (value: any) => {
-    if (value === "BUILDING") {
+    if (value) {
       setRenderComp({
         loaction: true,
         building: true,
         sub_building: false,
-        level: false,
-        room: false,
-      });
-    } else if (value === "SUB_BUILDING") {
-      setRenderComp({
-        loaction: true,
-        building: true,
-        sub_building: true,
-        level: false,
-        room: false,
-      });
-    } else if (value === "LEVEL") {
-      setRenderComp({
-        loaction: true,
-        building: true,
-        sub_building: true,
-        level: true,
-        room: false,
-      });
-    } else if (value === "ROOM") {
-      setRenderComp({
-        loaction: true,
-        building: true,
-        sub_building: true,
-        level: true,
-        room: true,
+        // level: false,
+        // room: false,
       });
     }
+    // else if (value === "SUB_BUILDING") {
+    //   setRenderComp({
+    //     loaction: true,
+    //     building: true,
+    //     sub_building: true,
+    //     level: false,
+    //     room: false,
+    //   });
+    // } else if (value === "LEVEL") {
+    //   setRenderComp({
+    //     loaction: true,
+    //     building: true,
+    //     sub_building: true,
+    //     level: true,
+    //     room: false,
+    //   });
+    // } else if (value === "ROOM") {
+    //   setRenderComp({
+    //     loaction: true,
+    //     building: true,
+    //     sub_building: true,
+    //     level: true,
+    //     room: true,
+    //   });
+    // }
   };
 
   const serviceOptions = Array.isArray(serviceList?.data)
@@ -192,23 +193,23 @@ const FinalDesign = () => {
         }))
     : [];
 
-  const levelsOptions =
-    levelsListData?.data
-      ?.filter(
-        (item: any) => item.sub_building_id === selectedSubBuilding?.value
-      )
-      .map((item: any) => ({
-        label: item.name || "Unknown",
-        value: item.id,
-      })) || [];
+  // const levelsOptions =
+  //   levelsListData?.data
+  //     ?.filter(
+  //       (item: any) => item.sub_building_id === selectedSubBuilding?.value
+  //     )
+  //     .map((item: any) => ({
+  //       label: item.name || "Unknown",
+  //       value: item.id,
+  //     })) || [];
 
-  const roomOptions =
-    roomListData?.data
-      ?.filter((item: any) => item.level_id === selectedLevel?.value)
-      .map((item: any) => ({
-        label: item.name || "Unknown",
-        value: item.id,
-      })) || [];
+  // const roomOptions =
+  //   roomListData?.data
+  //     ?.filter((item: any) => item.level_id === selectedLevel?.value)
+  //     .map((item: any) => ({
+  //       label: item.name || "Unknown",
+  //       value: item.id,
+  //     })) || [];
 
   const action = watch("action");
   const subServiceCheck = watch("sub_service");
@@ -376,16 +377,16 @@ const FinalDesign = () => {
                         setSelectedSubBuilding(value || null);
                         setSelectedLevel(null);
                         setSelectedRoom(null);
-                        if (value?.value) {
-                          fetchLevels({ sub_building_id: value.value });
-                        }
+                        // if (value?.value) {
+                        //   fetchLevels({ sub_building_id: value.value });
+                        // }
                         setValue("sub_building", value);
                       }}
                     />
                   </FormControl>
                 )}
 
-                {renderComp.level && (
+                {/* {renderComp.level && (
                   <FormControl className="w-1/4">
                     <RHFAutocomplete
                       name="levels"
@@ -407,9 +408,9 @@ const FinalDesign = () => {
                       }}
                     />
                   </FormControl>
-                )}
+                )} */}
 
-                {renderComp.room && (
+                {/* {renderComp.room && (
                   <FormControl className="w-1/4">
                     <RHFAutocomplete
                       name="rooms"
@@ -427,7 +428,7 @@ const FinalDesign = () => {
                       }}
                     />
                   </FormControl>
-                )}
+                )} */}
               </Box>
             )}
 
@@ -437,15 +438,16 @@ const FinalDesign = () => {
                 variant="contained"
                 size="large"
                 className="w-[20.5rem] h-12"
-                disabled={
-                  action?.calculation_type !== "BUILDING" &&
-                  action?.calculation_type !== "SUB_BUILDING" &&
-                  action?.calculation_type !== "LEVEL" &&
-                  action?.calculation_type !== "ROOM" &&
-                  selectedBuilding?.label !== "Underground Metro Station" &&
-                  selectedBuilding?.label !== "Elevated Metro Station" &&
-                  selectedBuilding?.label !== "Depot"
-                }
+                disabled={!selectedBuilding}
+                // disabled={
+                //   action?.calculation_type !== "BUILDING" &&
+                //   action?.calculation_type !== "SUB_BUILDING" &&
+                //   action?.calculation_type !== "LEVEL" &&
+                //   action?.calculation_type !== "ROOM" &&
+                //   selectedBuilding?.label !== "Underground Metro Station" &&
+                //   selectedBuilding?.label !== "Elevated Metro Station" &&
+                //   selectedBuilding?.label !== "Depot"
+                // }
               >
                 Next
               </Button>
@@ -595,7 +597,7 @@ const FinalDesign = () => {
                       </>
                     )}
 
-                    {action?.label === "Equipment Load" && (
+                    {action?.label === "equipment load" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <ElectricalPanelElevated />
@@ -613,7 +615,7 @@ const FinalDesign = () => {
                 )}
                 {subServiceCheck?.label === "Water Supply" && (
                   <>
-                    {action?.label === "PlumbingWaterDemand" && (
+                    {action?.label === "plumbing water demand" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <PlumbingWaterDemandElevated />
@@ -628,7 +630,7 @@ const FinalDesign = () => {
                       </>
                     )}
 
-                    {action?.label === "Head Loss Calculation" && (
+                    {action?.label === "head loss calculation" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <PlumbingHeadlossElevated />
@@ -643,7 +645,7 @@ const FinalDesign = () => {
                       </>
                     )}
 
-                    {action?.label === "PlumbingWaterSupplyPipeSizing" && (
+                    {action?.label === "plumbing water supply pipe sizing" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <PlumbingWaterSupplyPipeSizingElevated />
@@ -661,7 +663,7 @@ const FinalDesign = () => {
                 )}
                 {subServiceCheck?.label === "Drainage" && (
                   <>
-                    {action?.label === "Drainage Pipe Sizing" && (
+                    {action?.label === "drainage pipe sizing" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <DrainageElevated />
@@ -674,7 +676,7 @@ const FinalDesign = () => {
                       </>
                     )}
 
-                    {action?.label === "PlumbingRainWaterPipeDrop" && (
+                    {action?.label === "plumbing rainwater pipe drop" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <PlumbingRainWaterPipeDropElevated />
@@ -689,7 +691,7 @@ const FinalDesign = () => {
                       </>
                     )}
 
-                    {action?.label === "SeepagePumpSizingUnderground" && (
+                    {action?.label === "seepage pump sizing underground" && (
                       <>
                         {buildingCheck?.label ===
                           "Underground Metro Station" && (
@@ -698,7 +700,7 @@ const FinalDesign = () => {
                       </>
                     )}
 
-                    {action?.label === "PlumbingRWH" && (
+                    {action?.label === "plumbing rwh" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <PlumbingRWHElevated />
@@ -716,7 +718,7 @@ const FinalDesign = () => {
                 )}
                 {subServiceCheck?.label === "Hydrant System" && (
                   <>
-                    {action?.label === "Head Loss Calculation" && (
+                    {action?.label === "head loss calculation" && (
                       <>
                         {buildingCheck?.label === "Elevated Metro Station" && (
                           <FireHeadlossElevated />

@@ -1,7 +1,7 @@
 import { FormControl } from "@mui/material";
 import RHFTextField from "../../../components/RHF/RHFTextField";
 
-const Power = () => {
+const Hydrant = () => {
   return (
     <>
       <FormControl className="w-1/4">
@@ -13,40 +13,32 @@ const Power = () => {
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="voltage_rating"
-          label="Voltage Rating (V)"
+          name="flow_capacity"
+          label="Flow Capacity"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="current_rating"
-          label="Current Rating (A)"
+          name="pressure_rating"
+          label="Pressure Rating"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="material_and_durability"
-          label="Material and Durability"
+          name="location_and_accessibility"
+          label="Location and Accessibility"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="grounding"
-          label="Grounding"
-          type="number"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="type_of_installation"
-          label="Type of Installation"
+          name="durability"
+          label="Durability"
           type="number"
           rules={{ required: true }}
         />
@@ -62,4 +54,4 @@ const Power = () => {
   );
 };
 
-export default Power;
+export default Hydrant;

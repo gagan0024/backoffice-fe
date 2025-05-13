@@ -14,6 +14,8 @@ import ProductSubservice from "../pages/productSubservice";
 import Products from "../pages/product";
 import Manufacturer from "../pages/manufacturer";
 import FinalProduct from "../pages/finalProduct";
+import Items from "../pages/item";
+import FinalItem from "../pages/finalItem";
 
 const PrivateRoutes = () => {
   const allPrivateRoutes = useRoutes([
@@ -80,6 +82,14 @@ const PrivateRoutes = () => {
         {
           path: "manufacturer",
           element: <Manufacturer />,
+        },
+        {
+          path: "items",
+          element: <Items />,
+        },
+        {
+          path: "final-item-form",
+          element: <FinalItem />,
         },
         {
           path: "*",

@@ -3,14 +3,35 @@ import { useForm, FormProvider } from "react-hook-form";
 import RHFAutocomplete from "../../components/RHF/RHFAutocomplete";
 import { useState } from "react";
 import {
-  // useAddFinalProductsMutation,
+  useAddFinalProductMutation,
   useGetServiceListQuery,
   useGetProductSubServiceListQuery,
   useGetProductListQuery,
   useGetManufacturerListQuery,
+  useGetProductSubServiceListByIDQuery,
+  useGetProductListByIDQuery,
 } from "../../redux/api/api";
+
 import { toast } from "react-toastify";
 import RHFTextField from "../../components/RHF/RHFTextField";
+import Lighting from "./electrical/Lighting";
+import Power from "./electrical/Power";
+import Cables from "./electrical/Cables";
+import Panels from "./electrical/Panles";
+import UPS from "./electrical/UPS";
+import DB from "./electrical/DB";
+import DG from "./electrical/DG";
+import Fans from "./hvac/Fans";
+import Chiller from "./hvac/Chiller";
+import AHU from "./hvac/AHU";
+import ODU from "./hvac/ODU";
+import IDU from "./hvac/IDU";
+import Pumps from "./fireFighting/Pumps";
+import Hydrant from "./fireFighting/Hydrant";
+import Sprinkler from "./fireFighting/Sprinkler";
+import FireExtinguisher from "./fireFighting/FireExtinguisher";
+import Drainage from "./plumbing/Drainage";
+import WaterSupply from "./plumbing/WaterSupply";
 
 const FinalProduct = () => {
   const methods = useForm();
@@ -26,7 +47,7 @@ const FinalProduct = () => {
   const selectedService = watch("service");
   const serviceId = selectedService?.value;
 
-  const { data: productSubServices } = useGetProductSubServiceListQuery(
+  const { data: productSubServices } = useGetProductSubServiceListByIDQuery(
     { service_id: serviceId },
     { skip: !serviceId }
   );
@@ -34,7 +55,7 @@ const FinalProduct = () => {
   const selectedProductSubService = watch("product_sub_service");
   const productSubServiceId = selectedProductSubService?.value;
 
-  const { data: products } = useGetProductListQuery(
+  const { data: products } = useGetProductListByIDQuery(
     { product_sub_service_id: productSubServiceId },
     { skip: !productSubServiceId }
   );
@@ -49,7 +70,7 @@ const FinalProduct = () => {
 
   const [form2Payload, setForm2Payload] = useState<any>(null);
   const [showSecondForm, setShowSecondForm] = useState(false);
-  // const [addFinalProduct] = useAddFinalProductsMutation();
+  const [addFinalProduct] = useAddFinalProductMutation();
 
   // Options for dropdowns
   const serviceOptions =
@@ -93,17 +114,17 @@ const FinalProduct = () => {
       },
     };
 
-    // try {
-    //   const resp: any = await addFinalProduct(payload).unwrap();
-    //   if (resp.status === 200) {
-    //     toast.success("Product added successfully");
-    //     reset();
-    //     resetForm_2();
-    //     setShowSecondForm(false);
-    //   }
-    // } catch (error) {
-    //   toast.error("Failed to add product");
-    // }
+    try {
+      const resp: any = await addFinalProduct(payload).unwrap();
+      if (resp.status === 200) {
+        toast.success("Product added successfully");
+        reset();
+        resetForm_2();
+        setShowSecondForm(false);
+      }
+    } catch (error) {
+      toast.error("Failed to add product");
+    }
   };
 
   // Reset dependent fields when parent field changes
@@ -131,174 +152,41 @@ const FinalProduct = () => {
     const product = watch("product")?.label;
 
     if (productSubService === "Lighting") {
-      return (
-        <>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="model_number"
-              label="Model Number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="voltage"
-              label="Voltage (V)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="wattage"
-              label="Wattage (W)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="lamp_type"
-              label="Lamp Type"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="ip_rating_afo"
-              label="IP Rating (AFO)"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="ip_rating_mos"
-              label="IP Rating (MOS)"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="ik_rating"
-              label="IK Rating"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="cri"
-              label="Color Rendering Index (CRI)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="lumens_per_watt"
-              label="Lumens per Watt"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="lamp_lifetime"
-              label="Lamp Lifetime (Hours)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="compliance_standards"
-              label="Compliance with Standards"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="price"
-              label="Price (₹)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-        </>
-      );
+      return <Lighting />;
     } else if (productSubService === "Power") {
-      return (
-        <>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="model_number"
-              label="Model Number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="voltage_rating"
-              label="Voltage Rating (V)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="current_rating"
-              label="Current Rating (A)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="frequency"
-              label="Frequency (Hz)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="power_factor"
-              label="Power Factor"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="efficiency"
-              label="Efficiency (%)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="protection_rating"
-              label="Protection Rating (IP)"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="temperature_range"
-              label="Temperature Range (°C)"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl className="w-1/4">
-            <RHFTextField
-              name="price"
-              label="Price (₹)"
-              type="number"
-              rules={{ required: true }}
-            />
-          </FormControl>
-        </>
-      );
+      return <Power />;
+    } else if (productSubService === "Cables") {
+      return <Cables />;
+    } else if (productSubService === "Panels") {
+      return <Panels />;
+    } else if (productSubService === "UPS") {
+      return <UPS />;
+    } else if (productSubService === "DG") {
+      return <DG />;
+    } else if (productSubService === "DB") {
+      return <DB />;
+    } else if (productSubService === "Fans") {
+      return <Fans />;
+    } else if (productSubService === "Chiller") {
+      return <Chiller />;
+    } else if (productSubService === "AHU") {
+      return <AHU />;
+    } else if (productSubService === "ODU") {
+      return <ODU />;
+    } else if (productSubService === "IDU") {
+      return <IDU />;
+    } else if (productSubService === "Pumps") {
+      return <Pumps />;
+    } else if (productSubService === "Hydrant") {
+      return <Hydrant />;
+    } else if (productSubService === "Sprinkler") {
+      return <Sprinkler />;
+    } else if (productSubService === "FireExtinguisher") {
+      return <FireExtinguisher />;
+    } else if (productSubService === "WaterSupply") {
+      return <WaterSupply />;
+    } else if (productSubService === "Drainage") {
+      return <Drainage />;
     }
 
     return null;
@@ -409,7 +297,7 @@ const FinalProduct = () => {
                   variant="contained"
                   size="large"
                   className="w-[20.5rem] h-12"
-                  disabled={isSubmitting_2}
+                  disabled={isSubmitting_2 ? true : false}
                 >
                   Submit
                 </Button>

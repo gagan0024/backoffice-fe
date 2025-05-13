@@ -112,7 +112,6 @@ const Login = () => {
             </Button>
           </form>
         </Grid>
-
         {/* Right Section */}
         <Grid
           item

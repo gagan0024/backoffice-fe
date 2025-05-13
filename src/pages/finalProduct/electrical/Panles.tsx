@@ -1,7 +1,7 @@
 import { FormControl } from "@mui/material";
 import RHFTextField from "../../../components/RHF/RHFTextField";
 
-const Power = () => {
+const Panels = () => {
   return (
     <>
       <FormControl className="w-1/4">
@@ -13,40 +13,40 @@ const Power = () => {
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
+          name="load_rating"
+          label="Load Rating (V)"
+          type="number"
+          rules={{ required: true }}
+        />
+      </FormControl>
+      <FormControl className="w-1/4">
+        <RHFTextField
+          name="short_circuit_protection"
+          label="Short Circuit Protection"
+          type="number"
+          rules={{ required: true }}
+        />
+      </FormControl>
+      <FormControl className="w-1/4">
+        <RHFTextField
+          name="enclosure_type_and_material"
+          label="Enclosure Type and Material"
+          type="number"
+          rules={{ required: true }}
+        />
+      </FormControl>
+      <FormControl className="w-1/4">
+        <RHFTextField
           name="voltage_rating"
-          label="Voltage Rating (V)"
+          label="Voltage Rating"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="current_rating"
-          label="Current Rating (A)"
-          type="number"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="material_and_durability"
-          label="Material and Durability"
-          type="number"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="grounding"
-          label="Grounding"
-          type="number"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="type_of_installation"
-          label="Type of Installation"
+          name="num_of_circuits_and_breakers"
+          label="Number of Circuits and Breakers"
           type="number"
           rules={{ required: true }}
         />
@@ -62,4 +62,4 @@ const Power = () => {
   );
 };
 
-export default Power;
+export default Panels;

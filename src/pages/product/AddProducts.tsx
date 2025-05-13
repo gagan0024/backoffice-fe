@@ -181,6 +181,29 @@ const AddProducts = (props: any) => {
                   rules={{ required: "This field is required" }}
                 />
               </Box>
+
+              <Box className="flex gap-4 items-center">
+                <RHFAutocomplete
+                  name="unit"
+                  options={[
+                    { label: "Watt", value: "watt" },
+                    { label: "Amp", value: "amp" },
+                    { label: "Core", value: "core" },
+                    { label: "KW", value: "kw" },
+                    { label: "TR", value: "tr" },
+                    { label: "CFM", value: "cfm" },
+                    { label: "LPM", value: "lpm" },
+                    { label: "KG", value: "kg" },
+                    { label: "HP", value: "hp" },
+                  ]}
+                  getOptionLabel={(option) => option?.label || ""}
+                  isOptionEqualToValue={(option, value) =>
+                    option?.value === value?.value
+                  }
+                  label="Unit"
+                  rules={{ required: "This field is required" }}
+                />
+              </Box>
             </Box>
 
             <Button

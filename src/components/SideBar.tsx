@@ -75,6 +75,16 @@ const SideBar = () => {
           icon: <DynamicFormIcon />,
           route: "/final-design-form",
         },
+        {
+          name: "Items",
+          icon: <InventoryIcon />,
+          route: "/Items",
+        },
+        {
+          name: "Final Item Form",
+          icon: <InventoryIcon />,
+          route: "/final-item-form",
+        },
       ]);
     } else if (role === "PRODUCT_ADMIN") {
       setMenuItems([
@@ -136,9 +146,9 @@ const SideBar = () => {
   return (
     <Box
       sx={{
-        width: "270px",
+        width: "350px",
         height: "100vh",
-        backgroundColor: "black",
+        backgroundColor: "#2e90fa",
         color: "white",
         overflowY: "auto",
       }}
@@ -151,7 +161,7 @@ const SideBar = () => {
             disablePadding
             sx={{
               marginBottom: "2px",
-              "&:hover": { backgroundColor: "#333" },
+              "&:hover": { backgroundColor: "#1976d2" },
             }}
           >
             <ListItemButton
@@ -161,12 +171,12 @@ const SideBar = () => {
               }}
               sx={{
                 backgroundColor:
-                  selectedItem === item.name ? "#555" : "transparent",
+                  selectedItem === item.name ? "#1976d2" : "transparent",
               }}
             >
               <ListItemIcon
                 sx={{
-                  color: selectedItem === item.name ? "cyan" : "white",
+                  color: selectedItem === item.name ? "white" : "white",
                 }}
               >
                 {item.icon}
@@ -174,7 +184,7 @@ const SideBar = () => {
               <ListItemText
                 primary={item.name}
                 sx={{
-                  color: selectedItem === item.name ? "cyan" : "white",
+                  color: selectedItem === item.name ? "white" : "white",
                 }}
               />
             </ListItemButton>

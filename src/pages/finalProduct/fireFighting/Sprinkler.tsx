@@ -1,7 +1,7 @@
 import { FormControl } from "@mui/material";
 import RHFTextField from "../../../components/RHF/RHFTextField";
 
-const Power = () => {
+const Sprinkler = () => {
   return (
     <>
       <FormControl className="w-1/4">
@@ -13,40 +13,24 @@ const Power = () => {
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="voltage_rating"
-          label="Voltage Rating (V)"
+          name="flow_rate"
+          label="Flow Rate"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="current_rating"
-          label="Current Rating (A)"
+          name="coverage_area"
+          label="Coverage Area"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="material_and_durability"
-          label="Material and Durability"
-          type="number"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="grounding"
-          label="Grounding"
-          type="number"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="type_of_installation"
-          label="Type of Installation"
+          name="temperature_rating"
+          label="Temperature Rating"
           type="number"
           rules={{ required: true }}
         />
@@ -62,4 +46,4 @@ const Power = () => {
   );
 };
 
-export default Power;
+export default Sprinkler;

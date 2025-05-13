@@ -1,7 +1,7 @@
 import { FormControl } from "@mui/material";
 import RHFTextField from "../../../components/RHF/RHFTextField";
 
-const Lighting = () => {
+const Drainage = () => {
   return (
     <>
       <FormControl className="w-1/4">
@@ -13,84 +13,55 @@ const Lighting = () => {
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="voltage"
-          label="Voltage (V)"
+          name="hp"
+          label="HP"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="wattage"
-          label="Wattage (W)"
+          name="flow_rate"
+          label="Flow Rate"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="lamp_type"
-          label="Lamp Type"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="ip_rating_afo"
-          label="IP Rating (AFO)"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="ip_rating_mos"
-          label="IP Rating (MOS)"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="ik_rating"
-          label="IK Rating"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="cri"
-          label="Color Rendering Index (CRI)"
+          name="pressure_rating"
+          label="Pressure Rating"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="lumens_per_watt"
-          label="Lumens per Watt"
+          name="pump_head"
+          label="Pump Head"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="lamp_lifetime"
-          label="Lamp Lifetime (Hours)"
+          name="efficiency"
+          label="Efficiency"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="compliance_standards"
+          name="npsh"
+          label="NPSH (Net Positive Suction Head)"
+          rules={{ required: true }}
+        />
+      </FormControl>
+      <FormControl className="w-1/4">
+        <RHFTextField
+          name="compliance_with_standards"
           label="Compliance with Standards"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="price"
-          label="Price (₹)"
-          type="number"
           rules={{ required: true }}
         />
       </FormControl>
@@ -98,4 +69,4 @@ const Lighting = () => {
   );
 };
 
-export default Lighting;
+export default Drainage;

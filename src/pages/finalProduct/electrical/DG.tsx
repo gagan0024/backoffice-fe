@@ -1,7 +1,7 @@
 import { FormControl } from "@mui/material";
 import RHFTextField from "../../../components/RHF/RHFTextField";
 
-const Lighting = () => {
+const DG = () => {
   return (
     <>
       <FormControl className="w-1/4">
@@ -13,84 +13,64 @@ const Lighting = () => {
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="voltage"
-          label="Voltage (V)"
+          name="power_output"
+          label="Power Output (kVA or kW)"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="wattage"
-          label="Wattage (W)"
+          name="fuel_type"
+          label="Fuel Type"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="lamp_type"
-          label="Lamp Type"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="ip_rating_afo"
-          label="IP Rating (AFO)"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="ip_rating_mos"
-          label="IP Rating (MOS)"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="ik_rating"
-          label="IK Rating"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="cri"
-          label="Color Rendering Index (CRI)"
+          name="voltage_regulation"
+          label="Voltage Regulation"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="lumens_per_watt"
-          label="Lumens per Watt"
+          name="fuel_consumption_rate"
+          label="Fuel Consumption Rate"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="lamp_lifetime"
-          label="Lamp Lifetime (Hours)"
+          name="noise_level"
+          label="Noise Level (db)"
           type="number"
           rules={{ required: true }}
         />
       </FormControl>
       <FormControl className="w-1/4">
         <RHFTextField
-          name="compliance_standards"
+          name="operating_hours_and_runtime"
+          label="Operating Hours and Runtime"
+          type="number"
+          rules={{ required: true }}
+        />
+      </FormControl>
+      <FormControl className="w-1/4">
+        <RHFTextField
+          name="emissions_standards"
+          label="Emissions Standards"
+          type="number"
+          rules={{ required: true }}
+        />
+      </FormControl>
+      <FormControl className="w-1/4">
+        <RHFTextField
+          name="compliance_with_standards"
           label="Compliance with Standards"
-          rules={{ required: true }}
-        />
-      </FormControl>
-      <FormControl className="w-1/4">
-        <RHFTextField
-          name="price"
-          label="Price (₹)"
-          type="number"
           rules={{ required: true }}
         />
       </FormControl>
@@ -98,4 +78,4 @@ const Lighting = () => {
   );
 };
 
-export default Lighting;
+export default DG;

@@ -16,8 +16,11 @@ export const api = createApi({
     "SubService",
     "Action",
     "FinalDesigns",
+    "FinalProduct",
     "Category",
     "Manufacturer",
+    "Item",
+    "FinalItem",
   ],
 
   endpoints: (builder) => ({
@@ -224,6 +227,14 @@ export const api = createApi({
       providesTags: ["Product"],
     }),
 
+    getProductListByID: builder.query<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}products?product_sub_service_id=${data.product_sub_service_id}`,
+        method: "GET",
+      }),
+      providesTags: ["Product"],
+    }),
+
     addProduct: builder.mutation<any, any>({
       query: (data: any) => ({
         url: `${apiRoot}${data.url}`,
@@ -249,6 +260,7 @@ export const api = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+
     getManufacturerList: builder.query<any, any>({
       query: () => ({
         url: `${apiRoot}manufacturer`,
@@ -449,6 +461,66 @@ export const api = createApi({
       invalidatesTags: ["FinalDesigns"],
     }),
 
+    addFinalProduct: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["FinalProduct"],
+    }),
+
+    getItemList: builder.query<any, any>({
+      query: () => ({
+        url: `${apiRoot}items`,
+        method: "GET",
+      }),
+      providesTags: ["Item"],
+    }),
+
+    addItem: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["Item"],
+    }),
+
+    deleteItem: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Item"],
+    }),
+
+    updateItem: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "PATCH",
+        body: data.body,
+      }),
+      invalidatesTags: ["Item"],
+    }),
+
+    getItemsListByID: builder.query<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}items?sub_service_id=${data.sub_service_id}`,
+        method: "GET",
+      }),
+      providesTags: ["Item"],
+    }),
+
+    addFinalItem: builder.mutation<any, any>({
+      query: (data: any) => ({
+        url: `${apiRoot}${data.url}`,
+        method: "POST",
+        body: data.body,
+      }),
+      invalidatesTags: ["FinalItem"],
+    }),
+
     // getCategoryList: builder.query<any, any>({
     //   query: () => ({
     //     url: `${apiRoot}products/categories`,
@@ -486,6 +558,7 @@ export const {
   useGetSubBuildingListByIDQuery,
   useGetLevelsListByIDQuery,
   useGetProductListQuery,
+  useGetProductListByIDQuery,
   useAddProductMutation,
   useDeleteProductMutation,
   useUpdateProductMutation,
@@ -505,6 +578,7 @@ export const {
   useLazyGetLevelsListQuery,
   useLazyGetRoomsListQuery,
   useAddFinalDesignsMutation,
+  useAddFinalProductMutation,
   useGetProductSubServiceListQuery,
   useGetProductSubServiceListByIDQuery,
   useAddProductSubServiceMutation,
@@ -514,4 +588,10 @@ export const {
   useAddManufacturerMutation,
   useUpdateManufacturerMutation,
   useDeleteManufacturerMutation,
+  useGetItemListQuery,
+  useDeleteItemMutation,
+  useAddItemMutation,
+  useUpdateItemMutation,
+  useGetItemsListByIDQuery,
+  useAddFinalItemMutation,
 } = api;
